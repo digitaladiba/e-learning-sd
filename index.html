@@ -3,427 +3,426 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>LMS Sekolah Digital SD</title>
+  <title>LMS Sekolah Digital</title>
   
-  <!-- 1. LIBRARY & FONT (Wajib Online) -->
+  <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  <!-- Font Fredoka (Bulat & Lucu untuk SD) -->
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Font Poppins untuk Tampilan Modern -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
   <style>
-    /* 2. STYLE KHUSUS */
-    body { 
-      font-family: 'Fredoka', sans-serif; 
-      background-color: #f0f9ff; /* Biru langit muda */
-      -webkit-tap-highlight-color: transparent; 
-    }
+    body { font-family: 'Poppins', sans-serif; background-color: #f8fafc; -webkit-tap-highlight-color: transparent; }
     
-    /* Sembunyikan Scrollbar tapi tetap bisa scroll */
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-    /* Efek Kartu Timbul (3D Flat) */
-    .card-sd {
-      background: white; 
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      border-bottom: 4px solid #e2e8f0; /* Efek tebal bawah */
-      transition: transform 0.1s;
+    
+    /* Card Style Modern */
+    .card-modern {
+      background: white; border-radius: 20px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+      border: 1px solid #f1f5f9;
+      transition: transform 0.2s;
     }
-    .card-sd:active { 
-      transform: scale(0.98); 
-      border-bottom: 2px solid #e2e8f0; 
-    }
+    .card-modern:active { transform: scale(0.98); }
 
-    /* Tombol Utama */
-    .btn-primary {
-      background: linear-gradient(to bottom right, #3b82f6, #2563eb);
-      color: white; border-radius: 16px;
-      border-bottom: 4px solid #1e40af;
-      transition: all 0.2s;
-    }
-    .btn-primary:active { transform: translateY(2px); border-bottom: 0px; }
-
-    /* Animasi Masuk */
-    .fade-in { animation: fadeIn 0.5s ease-out forwards; opacity: 0; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    /* Gradient Hero */
+    .hero-gradient { background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); }
+    
+    /* Animasi */
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
   </style>
 </head>
-<body class="h-screen flex flex-col text-slate-700 overflow-hidden select-none">
+<body class="text-slate-800 h-screen overflow-hidden flex bg-slate-50">
 
-  <!-- 3. LOADER (Layar Tunggu) -->
-  <div id="loader" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center hidden">
-    <div class="animate-bounce mb-4 text-5xl">🚀</div>
-    <p class="font-bold text-blue-500 animate-pulse text-lg">Siap Meluncur...</p>
-  </div>
-
-  <!-- 4. HALAMAN LOGIN -->
-  <div id="pageLogin" class="fixed inset-0 z-40 bg-blue-50 flex flex-col items-center justify-center p-6 fade-in">
-    <div class="bg-white p-8 rounded-[35px] w-full max-w-sm shadow-xl text-center border-b-8 border-blue-100">
-      <!-- Ikon Login -->
-      <div class="w-24 h-24 bg-yellow-300 rounded-full mx-auto -mt-16 mb-6 flex items-center justify-center shadow-lg border-4 border-white animate-bounce">
-        <i class="fas fa-graduation-cap text-4xl text-blue-600"></i>
+  <!-- SIDEBAR (DESKTOP ONLY) -->
+  <aside class="hidden md:flex flex-col w-64 bg-white border-r border-slate-200 z-20">
+    <div class="p-6 flex items-center gap-3">
+      <div class="w-10 h-10 bg-indigo-600 rounded-xl flex items-center justify-center text-white text-lg font-bold shadow-lg shadow-indigo-200">
+        <i class="fas fa-shapes"></i>
       </div>
-      
-      <h1 class="text-3xl font-bold text-slate-800 mb-1">Sekolah Digital</h1>
-      <p class="text-slate-400 text-sm mb-8 font-medium">Belajar jadi seru & mudah!</p>
-
-      <div class="text-left space-y-4">
-        <div>
-          <label class="block text-xs font-bold text-slate-400 uppercase ml-2 mb-1">Email Sekolah</label>
-          <div class="relative">
-            <i class="fas fa-envelope absolute left-4 top-4 text-slate-300"></i>
-            <input type="email" id="emailInput" 
-              class="w-full bg-slate-50 border-2 border-slate-200 rounded-2xl py-3 pl-10 pr-4 focus:outline-none focus:border-blue-400 font-bold text-slate-700 transition" 
-              placeholder="siswa1@sekolah.id">
-          </div>
-        </div>
-        
-        <button onclick="doLogin()" class="w-full btn-primary py-4 font-bold text-lg flex justify-center items-center gap-2 shadow-lg shadow-blue-200">
-          MASUK KELAS <i class="fas fa-arrow-right"></i>
-        </button>
-        
-        <p id="loginError" class="text-red-500 text-center text-sm font-bold h-5 mt-2"></p>
+      <div>
+        <h1 class="font-bold text-lg text-slate-800 leading-none">EduSmart</h1>
+        <span class="text-[10px] text-slate-400 font-medium tracking-wide">LMS PLATFORM</span>
       </div>
     </div>
-    <p class="mt-8 text-xs font-bold text-blue-300 uppercase tracking-widest">Versi Pelajar SD 1.0</p>
-  </div>
-
-  <!-- 5. HALAMAN UTAMA (Aplikasi) -->
-  <div id="pageApp" class="hidden flex flex-col h-full bg-slate-50 relative max-w-md mx-auto w-full shadow-2xl border-x border-slate-100">
     
-    <!-- HEADER ATAS -->
-    <header class="bg-white px-6 pt-10 pb-4 rounded-b-[30px] shadow-sm z-10 flex justify-between items-center sticky top-0">
-      <div>
-        <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-1">SELAMAT PAGI,</p>
-        <div class="flex items-center gap-2">
-            <h2 id="uName" class="text-xl font-bold text-blue-600 truncate max-w-[180px]">Nama Siswa</h2>
-            <i class="fas fa-check-circle text-blue-400 text-xs"></i>
-        </div>
-        <span id="uClass" class="bg-yellow-100 text-yellow-700 text-[10px] font-bold px-3 py-1 rounded-full border border-yellow-200 mt-1 inline-block">KELAS -</span>
-      </div>
-      <!-- Tombol Logout -->
-      <button onclick="doLogout()" class="w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center text-red-400 border border-red-100 hover:bg-red-100 transition active:scale-90">
-        <i class="fas fa-power-off text-lg"></i>
+    <nav class="flex-1 px-4 space-y-2 mt-2">
+      <p class="px-4 text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-2">Menu Siswa</p>
+      
+      <button onclick="navTo('home')" id="sideHome" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition font-medium text-sm">
+        <i class="fas fa-th-large w-5"></i> Dashboard
       </button>
+      
+      <button onclick="navTo('kelas')" id="sideKelas" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition font-medium text-sm">
+        <i class="fas fa-book-reader w-5"></i> Ruang Kelas
+      </button>
+
+      <button onclick="navTo('tka')" id="sideTka" class="w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition font-medium text-sm">
+        <i class="fas fa-laptop-code w-5"></i> Ujian / TKA
+      </button>
+    </nav>
+    
+    <div class="p-4 border-t border-slate-100">
+      <button onclick="doLogout()" class="w-full flex items-center gap-3 px-4 py-2 text-red-500 hover:bg-red-50 rounded-lg transition text-sm font-medium">
+        <i class="fas fa-sign-out-alt w-5"></i> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="flex-1 flex flex-col h-full relative overflow-hidden">
+    
+    <!-- HEADER -->
+    <header class="bg-white/80 backdrop-blur-md border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-10">
+      <!-- Logo Mobile -->
+      <div class="flex items-center gap-3 md:hidden">
+        <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white text-sm font-bold">
+          <i class="fas fa-shapes"></i>
+        </div>
+        <span class="font-bold text-slate-800">EduSmart</span>
+      </div>
+
+      <div class="hidden md:block">
+        <h2 id="pageTitle" class="text-lg font-bold text-slate-800">Overview</h2>
+      </div>
+
+      <div class="flex items-center gap-4">
+        <div class="text-right hidden sm:block">
+          <p id="headName" class="text-sm font-bold text-slate-800 leading-tight">Siswa</p>
+          <p id="headRole" class="text-[10px] text-slate-500 font-medium">Kelas -</p>
+        </div>
+        <div class="w-9 h-9 bg-slate-100 rounded-full border border-slate-200 flex items-center justify-center text-slate-400">
+          <i class="fas fa-user"></i>
+        </div>
+      </div>
     </header>
 
-    <!-- AREA KONTEN (Bisa di-scroll) -->
-    <main class="flex-1 overflow-y-auto p-5 space-y-6 pb-28 no-scrollbar scroll-smooth">
+    <!-- CONTENT SCROLL AREA -->
+    <div id="contentArea" class="flex-1 overflow-y-auto p-4 md:p-8 pb-24 md:pb-8">
       
-      <!-- TAB 1: HOME -->
-      <div id="viewHome" class="space-y-5 fade-in">
-        
-        <!-- Banner Sekolah -->
-        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-3xl p-6 text-white shadow-xl shadow-blue-200 relative overflow-hidden group">
+      <!-- PAGE: HOME -->
+      <div id="viewHome" class="space-y-6 fade-in">
+        <!-- Hero Card -->
+        <div class="hero-gradient rounded-3xl p-6 md:p-8 text-white shadow-xl shadow-indigo-200 relative overflow-hidden">
           <div class="relative z-10">
-            <h3 id="schoolName" class="font-bold text-xl mb-1">Nama Sekolah</h3>
-            <p id="schoolAddr" class="text-xs text-blue-100 opacity-90 max-w-[80%] mb-4 leading-relaxed">Alamat Sekolah...</p>
-            <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold border border-white/20">
-              <i class="fas fa-calendar-alt text-yellow-300"></i> TA: <span id="schoolYear">-</span>
+            <h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2>
+            <p id="welcomeSchool" class="text-indigo-100 text-sm mb-6">Selamat belajar di sekolah digital.</p>
+            <div class="inline-flex items-center bg-white/20 backdrop-blur-md px-4 py-1.5 rounded-full text-xs font-bold border border-white/20">
+              <i class="fas fa-calendar-check mr-2 text-yellow-300"></i> TA: <span id="welcomeYear" class="ml-1">-</span>
             </div>
           </div>
-          <!-- Hiasan Background -->
-          <i class="fas fa-school absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12 group-hover:rotate-0 transition duration-500"></i>
-          <div class="absolute top-0 right-0 w-20 h-20 bg-white/10 rounded-full blur-2xl"></div>
+          <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
         </div>
 
-        <!-- Statistik -->
-        <div class="grid grid-cols-2 gap-4">
-          <div class="card-sd p-4 flex flex-col items-center justify-center gap-2">
-            <div class="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center text-orange-500 text-xl">
-                <i class="fas fa-chalkboard-teacher"></i>
-            </div>
-            <span id="statGuru" class="text-3xl font-bold text-slate-700">0</span>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Guru Kami</span>
+        <!-- Stats Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+          <div class="card-modern p-4 flex flex-col items-center justify-center gap-2">
+            <i class="fas fa-chalkboard-teacher text-2xl text-orange-500"></i>
+            <span id="statGuru" class="text-2xl font-bold text-slate-800">0</span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">Guru</span>
           </div>
-          <div class="card-sd p-4 flex flex-col items-center justify-center gap-2">
-            <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center text-blue-500 text-xl">
-                <i class="fas fa-user-friends"></i>
-            </div>
-            <span id="statSiswa" class="text-3xl font-bold text-slate-700">0</span>
-            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Teman Sekolah</span>
+          <div class="card-modern p-4 flex flex-col items-center justify-center gap-2">
+            <i class="fas fa-user-friends text-2xl text-blue-500"></i>
+            <span id="statSiswa" class="text-2xl font-bold text-slate-800">0</span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">Siswa</span>
+          </div>
+           <div class="card-modern p-4 flex flex-col items-center justify-center gap-2 col-span-2 md:col-span-1">
+            <i class="fas fa-school text-2xl text-purple-500"></i>
+            <span id="statKelas" class="text-2xl font-bold text-slate-800">0</span>
+            <span class="text-[10px] text-slate-400 font-bold uppercase">Kelas</span>
           </div>
         </div>
 
         <!-- Pengumuman -->
         <div>
-          <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2 text-sm uppercase tracking-wider ml-1">
-            <i class="fas fa-bullhorn text-yellow-500 animate-pulse"></i> Info Sekolah
+          <h3 class="font-bold text-slate-800 mb-4 flex items-center gap-2">
+            <i class="fas fa-bullhorn text-yellow-500"></i> Pengumuman
           </h3>
-          <div id="announcementList" class="space-y-3">
-            <!-- Diisi Javascript -->
-          </div>
+          <div id="annoList" class="space-y-3"></div>
         </div>
       </div>
 
-      <!-- TAB 2: RUANG KELAS -->
-      <div id="viewKelas" class="hidden space-y-5 fade-in">
-        <div class="text-center mb-6">
-          <h2 class="text-2xl font-bold text-slate-800">Ruang Kelas <span id="kelasTitle" class="text-blue-600"></span></h2>
-          <p class="text-xs text-slate-400 font-bold">Ayo cek tugas & materi hari ini!</p>
+      <!-- PAGE: RUANG KELAS -->
+      <div id="viewKelas" class="hidden space-y-6 fade-in">
+        <div class="flex justify-between items-center">
+            <h3 class="font-bold text-slate-800 text-lg">Materi & Tugas</h3>
+            <span class="bg-indigo-100 text-indigo-600 px-3 py-1 rounded-full text-xs font-bold" id="badgeKelas">Kelas -</span>
+        </div>
+        
+        <!-- Tab Menu -->
+        <div class="flex gap-2 border-b border-slate-200 pb-1 overflow-x-auto">
+            <button onclick="renderKelasContent('materi')" id="tabMateri" class="px-4 py-2 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 transition whitespace-nowrap">Materi</button>
+            <button onclick="renderKelasContent('tugas')" id="tabTugas" class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition whitespace-nowrap">Tugas</button>
+            <button onclick="renderKelasContent('jadwal')" id="tabJadwal" class="px-4 py-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition whitespace-nowrap">Jadwal</button>
         </div>
 
-        <!-- Filter Menu -->
-        <div class="flex p-1.5 bg-white rounded-2xl border border-slate-100 shadow-sm sticky top-0 z-20">
-          <button onclick="filterKelas('all')" id="tabAll" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition bg-blue-100 text-blue-600 shadow-sm">Semua</button>
-          <button onclick="filterKelas('tugas')" id="tabTugas" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-purple-500">PR/Tugas</button>
-          <button onclick="filterKelas('jadwal')" id="tabJadwal" class="flex-1 py-2.5 rounded-xl text-xs font-bold transition text-slate-400 hover:text-green-500">Jadwal</button>
-        </div>
-
-        <div id="kelasContent" class="space-y-3 pb-10 min-h-[300px]">
-          <!-- Konten Dinamis -->
+        <div id="kelasContainer" class="space-y-4">
+            <!-- Konten Dinamis -->
         </div>
       </div>
 
-    </main>
-
-    <!-- 6. NAVIGASI BAWAH (Menu Utama) -->
-    <nav class="absolute bottom-6 left-6 right-6 bg-white h-[70px] rounded-[24px] shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex justify-around items-center px-4 z-30 border border-slate-50">
-      
-      <!-- Tombol Home -->
-      <button onclick="navTo('home')" id="navHome" class="flex flex-col items-center gap-1 text-blue-600 w-16 transition active:scale-90 group">
-        <i class="fas fa-home text-2xl group-hover:-translate-y-1 transition"></i>
-        <span class="text-[9px] font-bold">Home</span>
-      </button>
-      
-      <!-- Tombol Tengah (Ruang Kelas) -->
-      <button onclick="navTo('kelas')" id="navKelas" class="relative -top-8 w-16 h-16 bg-white rounded-full flex items-center justify-center text-blue-600 shadow-xl border-[6px] border-slate-50 transition active:scale-90 group">
-        <div class="w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-white group-hover:bg-blue-500 transition">
-             <i class="fas fa-book-open text-xl"></i>
+      <!-- PAGE: TKA (UJIAN) -->
+      <div id="viewTka" class="hidden space-y-6 fade-in">
+        <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+            <div>
+                <h3 class="font-bold text-slate-800 text-lg">CBT / Ujian Online</h3>
+                <p class="text-slate-500 text-xs">Kerjakan ujian dengan jujur ya!</p>
+            </div>
+            <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xl">
+                <i class="fas fa-laptop-code"></i>
+            </div>
         </div>
-      </button>
 
-      <!-- Tombol Akun (Dummy) -->
-      <button onclick="alert('Halo! Ini profil kamu.')" class="flex flex-col items-center gap-1 text-slate-300 w-16 transition active:scale-90 hover:text-slate-400">
-        <i class="fas fa-user-astronaut text-2xl"></i>
-        <span class="text-[9px] font-bold">Akun</span>
-      </button>
+        <div id="tkaContainer" class="grid gap-4 md:grid-cols-2">
+            <div class="text-center py-10 col-span-2">
+                <i class="fas fa-circle-notch fa-spin text-indigo-500 mb-2"></i>
+                <p class="text-slate-400 text-xs">Memuat data ujian...</p>
+             </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="md:hidden bg-white border-t border-slate-200 fixed bottom-0 w-full h-16 flex justify-around items-center px-2 z-30 pb-safe">
+        <button onclick="navTo('home')" id="mobHome" class="flex flex-col items-center gap-1 text-indigo-600 w-16 transition active:scale-90">
+            <i class="fas fa-home text-lg"></i>
+            <span class="text-[10px] font-medium">Home</span>
+        </button>
+        <button onclick="navTo('kelas')" id="mobKelas" class="flex flex-col items-center gap-1 text-slate-400 w-16 transition active:scale-90">
+            <i class="fas fa-book text-lg"></i>
+            <span class="text-[10px] font-medium">Kelas</span>
+        </button>
+        <button onclick="navTo('tka')" id="mobTka" class="relative -top-6 w-14 h-14 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg border-4 border-slate-50 transition active:scale-90">
+            <i class="fas fa-laptop-code text-lg"></i>
+        </button>
+        <button onclick="doLogout()" class="flex flex-col items-center gap-1 text-slate-400 w-16 transition active:scale-90">
+            <i class="fas fa-user text-lg"></i>
+            <span class="text-[10px] font-medium">Akun</span>
+        </button>
     </nav>
 
+  </main>
+
+  <!-- LOGIN OVERLAY -->
+  <div id="loginOverlay" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-6">
+    <div class="w-full max-w-sm text-center">
+        <div class="w-24 h-24 bg-indigo-600 rounded-3xl mx-auto flex items-center justify-center text-white text-5xl mb-6 shadow-xl shadow-indigo-200 rotate-3">
+            <i class="fas fa-shapes"></i>
+        </div>
+        <h1 class="text-2xl font-bold text-slate-800 mb-2">EduSmart Login</h1>
+        <p class="text-slate-500 mb-8 text-sm">Masuk untuk mengakses materi & ujian.</p>
+
+        <div class="text-left space-y-4">
+            <div>
+                <label class="text-xs font-bold text-slate-400 uppercase ml-1">Email Sekolah</label>
+                <input type="email" id="emailInput" class="w-full mt-1 bg-slate-50 border border-slate-200 p-4 rounded-xl focus:outline-none focus:border-indigo-500 font-bold text-slate-700 transition" placeholder="siswa@sekolah.sch.id">
+            </div>
+            <button onclick="doLogin()" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+                Masuk Sekarang
+            </button>
+            <p id="loginMsg" class="text-center text-red-500 text-xs font-bold min-h-[20px] mt-2"></p>
+        </div>
+    </div>
   </div>
 
 <script>
 // ==========================================
-// KONFIGURASI API (URL ANDA)
+// CONFIG API
 // ==========================================
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 
-// Variabel Global
 let USER = null;
 let CACHE_KELAS = null;
-
-// Fungsi Singkat
 const el = (id) => document.getElementById(id);
-const showLoader = () => el('loader').classList.remove('hidden');
-const hideLoader = () => el('loader').classList.add('hidden');
 
-// 1. FUNGSI LOGIN
+// --- LOGIN SYSTEM ---
 function doLogin(){
-  const email = el('emailInput').value.trim();
-  if(!email) {
-    el('loginError').innerText = "Isi email dulu ya! 🥺";
-    return;
-  }
-  
-  showLoader();
-  el('loginError').innerText = "";
-
-  // Panggil API Google Script
-  fetch(`${API_URL}?action=login&email=${email}`)
+    const email = el('emailInput').value.trim();
+    if(!email) return el('loginMsg').innerText = "Email wajib diisi";
+    
+    el('loginMsg').innerText = "Sedang memeriksa...";
+    
+    fetch(`${API_URL}?action=login&email=${email}`)
     .then(r => r.json())
     .then(d => {
-      hideLoader();
-      if(d.status){
-        USER = d;
-        initApp(); // Masuk ke Aplikasi
-      } else {
-        el('loginError').innerText = "Email tidak ditemukan / salah ❌";
-      }
+        if(d.status){
+            USER = d;
+            el('loginOverlay').classList.add('hidden');
+            initApp();
+        } else {
+            el('loginMsg').innerText = d.message;
+        }
     })
-    .catch(err => {
-      hideLoader();
-      alert("Gagal koneksi. Cek internet kamu ya! 📶");
-    });
+    .catch(() => el('loginMsg').innerText = "Gagal koneksi server");
 }
 
 function doLogout(){
-  if(confirm("Yakin mau keluar aplikasi? 👋")){
-    location.reload();
-  }
+    if(confirm("Keluar aplikasi?")) location.reload();
 }
 
-// 2. INISIALISASI APLIKASI
+// --- INIT ---
 function initApp(){
-  // Animasi Transisi
-  el('pageLogin').classList.add('hidden');
-  el('pageApp').classList.remove('hidden');
-  
-  // Isi Data Header
-  el('uName').innerText = USER.nama;
-  el('uClass').innerText = `KELAS ${USER.kelas}`;
-  el('kelasTitle').innerText = USER.kelas;
-
-  // Ambil Data
-  loadHomeData();
-  loadKelasData();
+    el('welcomeName').innerText = USER.nama;
+    el('headName').innerText = USER.nama;
+    el('headRole').innerText = `${USER.role} • ${USER.kelas}`;
+    el('badgeKelas').innerText = `Kelas ${USER.kelas}`;
+    loadHome();
 }
 
-// 3. NAVIGASI TAB
+// --- NAVIGATION ---
 function navTo(page){
-  if(page === 'home'){
-    el('viewHome').classList.remove('hidden');
-    el('viewKelas').classList.add('hidden');
+    ['viewHome', 'viewKelas', 'viewTka'].forEach(id => el(id).classList.add('hidden'));
     
-    // Warna Ikon
-    el('navHome').className = "flex flex-col items-center gap-1 text-blue-600 w-16 transition active:scale-90 group";
-    el('navKelas').querySelector('div').className = "w-full h-full rounded-full bg-slate-200 flex items-center justify-center text-slate-500 transition";
+    // Reset Mobile Nav Colors
+    el('mobHome').className = "flex flex-col items-center gap-1 text-slate-400 w-16 transition";
+    el('mobKelas').className = "flex flex-col items-center gap-1 text-slate-400 w-16 transition";
+    el('mobTka').className = "relative -top-6 w-14 h-14 bg-white rounded-full flex items-center justify-center text-indigo-600 shadow-lg border-4 border-slate-50 transition";
     
-  } else if (page === 'kelas'){
-    el('viewHome').classList.add('hidden');
-    el('viewKelas').classList.remove('hidden');
-    
-    // Warna Ikon
-    el('navHome').className = "flex flex-col items-center gap-1 text-slate-300 w-16 transition active:scale-90 group";
-    el('navKelas').querySelector('div').className = "w-full h-full rounded-full bg-blue-600 flex items-center justify-center text-white shadow-lg transition";
-  }
+    // Reset Desktop Sidebar
+    ['sideHome', 'sideKelas', 'sideTka'].forEach(id => {
+       el(id).className = "w-full flex items-center gap-3 px-4 py-3 text-slate-500 hover:bg-indigo-50 hover:text-indigo-600 rounded-xl transition font-medium text-sm";
+    });
+
+    if(page === 'home'){
+        el('viewHome').classList.remove('hidden');
+        el('mobHome').className = "flex flex-col items-center gap-1 text-indigo-600 w-16 transition";
+        el('sideHome').classList.add('bg-indigo-50', 'text-indigo-600');
+        el('pageTitle').innerText = "Overview";
+    }
+    if(page === 'kelas'){
+        el('viewKelas').classList.remove('hidden');
+        el('mobKelas').className = "flex flex-col items-center gap-1 text-indigo-600 w-16 transition";
+        el('sideKelas').classList.add('bg-indigo-50', 'text-indigo-600');
+        el('pageTitle').innerText = "Ruang Kelas";
+        if(!CACHE_KELAS) loadKelas();
+    }
+    if(page === 'tka'){
+        el('viewTka').classList.remove('hidden');
+        el('mobTka').className = "relative -top-6 w-14 h-14 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg border-4 border-slate-50 transition";
+        el('sideTka').classList.add('bg-indigo-50', 'text-indigo-600');
+        el('pageTitle').innerText = "Ujian Online";
+        loadTka();
+    }
 }
 
-// 4. LOAD DATA HOME
-function loadHomeData(){
-  fetch(`${API_URL}?action=home`)
-    .then(r => r.json())
-    .then(d => {
-      // Isi Info Sekolah
-      el('schoolName').innerText = d.info.nama;
-      el('schoolAddr').innerText = d.info.alamat;
-      el('schoolYear').innerText = d.info.tahun;
-      el('statGuru').innerText = d.statistik.guru;
-      el('statSiswa').innerText = d.statistik.siswa;
-
-      // Isi Pengumuman
-      const html = d.pengumuman.map(p => `
-        <div class="card-sd p-4 flex gap-3 items-start border-l-4 border-l-yellow-400">
-          <div class="bg-yellow-100 text-yellow-600 w-10 h-10 rounded-full flex items-center justify-center shrink-0">
-            <i class="fas fa-bell"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-700 text-sm leading-tight">${p.judul}</h4>
-            <p class="text-xs text-slate-500 mt-1 line-clamp-2">${p.isi}</p>
-            <span class="text-[10px] text-blue-400 font-bold mt-2 block bg-blue-50 w-fit px-2 py-0.5 rounded">${p.tanggal}</span>
-          </div>
-        </div>
-      `).join('');
-      el('announcementList').innerHTML = html || '<div class="text-center text-xs text-slate-400 py-4 border-2 border-dashed rounded-xl">Belum ada info baru 📭</div>';
+// --- LOAD DATA ---
+function loadHome(){
+    fetch(`${API_URL}?action=home`).then(r=>r.json()).then(d=>{
+        el('welcomeSchool').innerText = d.info.nama;
+        el('welcomeYear').innerText = d.info.tahun;
+        el('statGuru').innerText = d.statistik.guru;
+        el('statSiswa').innerText = d.statistik.siswa;
+        el('statKelas').innerText = d.statistik.kelas;
+        
+        el('annoList').innerHTML = d.pengumuman.map(p => `
+            <div class="card-modern p-4 flex gap-3 border-l-4 border-l-yellow-400">
+                <div class="shrink-0 pt-1 text-yellow-500"><i class="fas fa-bell"></i></div>
+                <div>
+                    <h4 class="font-bold text-sm text-slate-800">${p.judul}</h4>
+                    <p class="text-xs text-slate-500 mt-1">${p.isi}</p>
+                    <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded mt-2 inline-block font-bold text-slate-400">${p.tanggal}</span>
+                </div>
+            </div>
+        `).join('') || emptyState("Tidak ada pengumuman");
     });
 }
 
-// 5. LOAD DATA KELAS
-function loadKelasData(){
-  fetch(`${API_URL}?action=ruangkelas&kelas=${USER.kelas}`)
-    .then(r => r.json())
-    .then(d => {
-      CACHE_KELAS = d;
-      renderKelas('all'); // Tampilkan semua di awal
+function loadKelas(){
+    fetch(`${API_URL}?action=ruangkelas&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{
+        CACHE_KELAS = d;
+        renderKelasContent('materi');
     });
 }
 
-// 6. RENDER KELAS (FILTER)
-function filterKelas(mode){
-  // Reset Warna Tombol Filter
-  const baseClass = "flex-1 py-2.5 rounded-xl text-xs font-bold transition";
-  el('tabAll').className = `${baseClass} text-slate-400 hover:bg-slate-50`;
-  el('tabTugas').className = `${baseClass} text-slate-400 hover:bg-slate-50`;
-  el('tabJadwal').className = `${baseClass} text-slate-400 hover:bg-slate-50`;
-
-  // Set Warna Aktif
-  if(mode === 'all') el('tabAll').className = `${baseClass} bg-blue-100 text-blue-600 shadow-sm`;
-  if(mode === 'tugas') el('tabTugas').className = `${baseClass} bg-purple-100 text-purple-600 shadow-sm`;
-  if(mode === 'jadwal') el('tabJadwal').className = `${baseClass} bg-green-100 text-green-600 shadow-sm`;
-
-  renderKelas(mode);
+function loadTka(){
+    fetch(`${API_URL}?action=tka&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{
+        if(d.data && d.data.length > 0){
+            el('tkaContainer').innerHTML = d.data.map(t => `
+                <div class="card-modern p-5 flex flex-col justify-between h-full relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 bg-red-100 text-red-600 text-[10px] font-bold px-3 py-1 rounded-bl-xl">
+                        <i class="fas fa-clock"></i> ${t.durasi}
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold text-indigo-500 uppercase tracking-wide bg-indigo-50 px-2 py-0.5 rounded">${t.mapel}</span>
+                        <h4 class="font-bold text-slate-800 mt-2 text-lg leading-tight">${t.judul}</h4>
+                        <p class="text-xs text-slate-400 mt-2">ID: ${t.id}</p>
+                    </div>
+                    <a href="${t.link}" target="_blank" class="mt-4 w-full bg-indigo-600 text-white text-center py-3 rounded-xl font-bold text-sm shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center justify-center gap-2">
+                        Mulai Ujian <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            `).join('');
+        } else {
+            el('tkaContainer').innerHTML = `<div class="col-span-2 text-center py-10 opacity-50"><i class="fas fa-mug-hot text-3xl mb-2"></i><p class="text-sm">Tidak ada ujian aktif saat ini.</p></div>`;
+        }
+    });
 }
 
-function renderKelas(mode){
-  if(!CACHE_KELAS) return;
-  let html = '';
-
-  // === A. JADWAL (Hijau) ===
-  if(mode === 'all' || mode === 'jadwal'){
-    if(CACHE_KELAS.jadwal.length > 0){
-      html += `<div class="mb-2 mt-2 px-1"><span class="text-xs font-extrabold text-green-600 uppercase tracking-wider"><i class="fas fa-calendar-alt mr-1"></i> Jadwal Pelajaran</span></div>`;
-      CACHE_KELAS.jadwal.forEach(j => {
-        html += `
-        <div class="card-sd p-3 flex items-center gap-3 mb-3 border-l-4 border-l-green-400">
-           <div class="w-12 h-12 bg-green-50 rounded-xl flex flex-col items-center justify-center text-green-600">
-             <span class="text-[9px] font-black uppercase tracking-tighter">${j.hari.substring(0,3)}</span>
-             <i class="fas fa-clock text-xs mt-0.5"></i>
-           </div>
-           <div>
-             <h4 class="font-bold text-slate-700 text-sm">${j.mapel}</h4>
-             <p class="text-xs text-slate-500 font-medium">${j.jam} • ${j.guru}</p>
-           </div>
-        </div>`;
-      });
-    } else if(mode === 'jadwal') {
-       html += emptyState("Tidak ada jadwal hari ini");
+// --- RENDER CONTENT ---
+function renderKelasContent(type){
+    if(!CACHE_KELAS) return;
+    
+    // Update Tab Styles
+    ['tabMateri', 'tabTugas', 'tabJadwal'].forEach(id => el(id).className = "px-4 py-2 text-sm font-medium text-slate-500 hover:text-indigo-600 transition whitespace-nowrap");
+    
+    let html = "";
+    
+    if(type === 'materi'){
+        el('tabMateri').className = "px-4 py-2 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 transition whitespace-nowrap";
+        html = CACHE_KELAS.materi.map(m => `
+            <a href="${m.link}" target="_blank" class="card-modern p-4 flex items-center gap-4 hover:bg-indigo-50 transition group">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <div class="flex-1">
+                    <h4 class="font-bold text-slate-800 text-sm">${m.mapel}</h4>
+                    <p class="text-xs text-slate-500 line-clamp-1">${m.judul}</p>
+                </div>
+                <i class="fas fa-chevron-right text-slate-300 text-sm"></i>
+            </a>
+        `).join('') || emptyState("Belum ada materi");
+    } 
+    else if (type === 'tugas'){
+        el('tabTugas').className = "px-4 py-2 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 transition whitespace-nowrap";
+        html = CACHE_KELAS.tugas.map(t => `
+            <div class="card-modern p-4 border-l-4 border-l-purple-500 relative">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <span class="text-[10px] font-bold bg-purple-100 text-purple-600 px-2 py-0.5 rounded">${t.mapel}</span>
+                        <h4 class="font-bold text-slate-800 mt-1 text-sm">${t.judul}</h4>
+                        <p class="text-xs text-red-400 mt-1 font-bold"><i class="fas fa-stopwatch"></i> Deadline: ${t.deadline}</p>
+                    </div>
+                    <button class="w-8 h-8 rounded-full bg-slate-100 hover:bg-purple-600 hover:text-white transition flex items-center justify-center text-slate-400">
+                        <i class="fas fa-pen text-xs"></i>
+                    </button>
+                </div>
+            </div>
+        `).join('') || emptyState("Tidak ada tugas");
     }
-  }
-
-  // === B. TUGAS (Ungu) ===
-  if(mode === 'all' || mode === 'tugas'){
-    if(CACHE_KELAS.tugas.length > 0){
-      html += `<div class="mb-2 mt-4 px-1"><span class="text-xs font-extrabold text-purple-600 uppercase tracking-wider"><i class="fas fa-tasks mr-1"></i> PR & Tugas</span></div>`;
-      CACHE_KELAS.tugas.forEach(t => {
-        html += `
-        <div class="bg-white rounded-[20px] p-4 mb-3 shadow-sm border border-slate-100 relative overflow-hidden group">
-           <div class="absolute left-0 top-0 bottom-0 w-2 bg-purple-500"></div>
-           <div class="flex justify-between items-start pl-3">
-              <div>
-                <span class="bg-purple-100 text-purple-700 text-[9px] font-bold px-2 py-0.5 rounded border border-purple-200">${t.mapel}</span>
-                <h4 class="font-bold text-slate-700 mt-2 text-sm leading-tight">${t.judul}</h4>
-                <p class="text-[10px] text-slate-400 mt-1 font-bold"><i class="fas fa-stopwatch text-red-400"></i> Deadline: ${t.deadline}</p>
-              </div>
-              <button class="w-8 h-8 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center hover:bg-purple-500 hover:text-white transition">
-                <i class="fas fa-pencil-alt text-xs"></i>
-              </button>
-           </div>
-        </div>`;
-      });
-    } else if (mode === 'tugas') {
-      html += emptyState("Hore! Tidak ada PR 🎉");
+    else if (type === 'jadwal'){
+        el('tabJadwal').className = "px-4 py-2 text-sm font-bold text-indigo-600 border-b-2 border-indigo-600 transition whitespace-nowrap";
+        html = CACHE_KELAS.jadwal.map(j => `
+            <div class="card-modern p-4 flex gap-4 items-center border-l-4 border-l-green-500">
+                <div class="text-center w-12">
+                    <span class="block text-xs font-bold text-green-600 uppercase">${j.hari.substring(0,3)}</span>
+                    <span class="block text-[10px] text-slate-400 font-bold bg-slate-100 rounded mt-1">${j.jam.split('-')[0]}</span>
+                </div>
+                <div>
+                    <h4 class="font-bold text-slate-800 text-sm">${j.mapel}</h4>
+                    <p class="text-xs text-slate-500">Guru: ${j.guru}</p>
+                </div>
+            </div>
+        `).join('') || emptyState("Jadwal kosong");
     }
-  }
-
-  // === C. MATERI (Biru - Hanya muncul di All) ===
-  if(mode === 'all'){
-    if(CACHE_KELAS.materi.length > 0){
-      html += `<div class="mb-2 mt-4 px-1"><span class="text-xs font-extrabold text-blue-600 uppercase tracking-wider"><i class="fas fa-book mr-1"></i> Materi Belajar</span></div>`;
-      CACHE_KELAS.materi.forEach(m => {
-        html += `
-        <a href="${m.link}" target="_blank" class="card-sd p-3 flex items-center gap-3 mb-3 border-l-4 border-l-blue-400 active:bg-blue-50 group">
-           <div class="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center text-blue-500 group-hover:scale-110 transition">
-             <i class="fas fa-file-alt"></i>
-           </div>
-           <div class="flex-1">
-             <h4 class="font-bold text-slate-700 text-sm group-hover:text-blue-600 transition">${m.mapel}</h4>
-             <p class="text-xs text-slate-500 truncate">${m.judul}</p>
-           </div>
-           <i class="fas fa-chevron-right text-slate-300 text-xs"></i>
-        </a>`;
-      });
-    }
-  }
-
-  el('kelasContent').innerHTML = html;
+    
+    el('kelasContainer').innerHTML = html;
 }
 
 function emptyState(msg){
-    return `<div class="flex flex-col items-center justify-center py-10 opacity-60">
-        <i class="fas fa-cookie-bite text-4xl text-slate-300 mb-2"></i>
-        <p class="text-xs font-bold text-slate-400">${msg}</p>
-    </div>`;
+    return `<div class="text-center py-8 text-slate-400 text-xs italic opacity-70">${msg}</div>`;
 }
 </script>
 </body>
