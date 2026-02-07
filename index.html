@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>E-Learning SD</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body{font-family:Arial;background:#f4f6f8;margin:0}
+    header{background:#1e88e5;color:#fff;padding:15px}
+    .box{background:#fff;margin:15px;padding:15px;border-radius:8px}
+    .hidden{display:none}
+    button{padding:8px 12px;background:#1e88e5;color:#fff;border:0;border-radius:5px;cursor:pointer}
+    input{padding:8px;width:100%;margin:6px 0}
+    nav button{margin-right:6px}
+  </style>
+</head>
+<body>
+
+<header>
+  <h2>E-Learning SD</h2>
+  <div id="userInfo"></div>
+</header>
+
+<!-- LOGIN -->
+<div class="box" id="loginBox">
+  <h3>Login</h3>
+  <input type="email" id="email" placeholder="Email Gmail">
+  <button onclick="login()">Masuk</button>
+  <div id="loginMsg"></div>
+</div>
+
+<!-- HOME -->
+<div class="box hidden" id="homeBox">
+  <nav>
+    <button onclick="loadHome()">Home</button>
+    <button onclick="loadRuangKelas()">Ruang Kelas</button>
+    <button onclick="logout()">Logout</button>
+  </nav>
+
+  <h3 id="welcome"></h3>
+
+  <div id="homeContent"></div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
+let currentUser = null;
+
+function login(){
+  const email = document.getElementById("email").value;
+  fetch(`${API_URL}?action=login&email=${email}`)
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.status){
+        currentUser = d;
+        document.getElementById("loginBox").classList.add("hidden");
+        document.getElementById("homeBox").classList.remove("hidden");
+        document.getElementById("userInfo").innerText =
+          `${d.nama} (${d.role})`;
+        document.getElementById("welcome").innerText =
+          `Selamat datang, ${d.nama}`;
+        loadHome();
+      }else{
+        document.getElementById("loginMsg").innerText = d.message;
+      }
+    });
+}
+
+function loadHome(){
+  fetch(`${API_URL}?action=home`)
+    .then(r=>r.json())
+    .then(d=>{
+      document.getElementById("homeContent").innerHTML = `
+        <b>Informasi Sekolah</b><br>
+        ${d.sekolah[0]}<br>
+        ${d.sekolah[1]}<br>
+        <hr>
+        <b>Tahun Ajaran:</b> ${d.tahun}<br><br>
+        <b>Statistik</b><br>
+        Guru: ${d.statistik.guru}<br>
+        Siswa: ${d.statistik.siswa}<br>
+        Kelas: ${d.statistik.kelas}<br><br>
+        <b>Pengumuman</b><br>
+        ${d.pengumuman.map(p=>`• ${p[1]}: ${p[2]}`).join("<br>")}
+      `;
+    });
+}
+
+function loadRuangKelas(){
+  fetch(`${API_URL}?action=ruangkelas&kelas=${currentUser.kelas}`)
+    .then(r=>r.json())
+    .then(d=>{
+      document.getElementById("homeContent").innerHTML = `
+        <b>Ruang Kelas ${currentUser.kelas}</b><br><br>
+        <b>Materi:</b> ${d.materi.length}<br>
+        <b>Tugas Aktif:</b> ${d.tugas.length}<br>
+        <b>Jadwal Mingguan:</b> ${d.jadwal.length}
+      `;
+    });
+}
+
+function logout(){
+  location.reload();
+}
+</script>
+
+</body>
+</html>
