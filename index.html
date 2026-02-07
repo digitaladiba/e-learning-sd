@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-  <title>LMS EduSmart Pro</title>
+  <title>LMS SDN 04 Taman</title>
   
   <!-- Tailwind CSS & Icons -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -42,7 +42,7 @@
       <div class="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center text-white font-bold shadow-md shadow-indigo-200">
         <i class="fas fa-shapes"></i>
       </div>
-      <span class="font-bold text-slate-800 tracking-tight text-lg">EduSmart</span>
+      <span class="font-bold text-slate-800 tracking-tight text-lg">E-Learningt</span>
     </div>
     <div class="flex items-center gap-3">
       <div class="text-right hidden sm:block">
@@ -103,7 +103,7 @@
        </div>
     </div>
 
-    <!-- 3. HALAMAN GURU (Panel Admin) -->
+    <!-- 3. HALAMAN GURU / ADMIN (Panel Admin) -->
     <div id="viewGuru" class="hidden fade-in space-y-6">
         <!-- Menu Grid Guru -->
         <div class="grid grid-cols-2 gap-3 mb-4">
@@ -214,12 +214,12 @@
   <div id="loginOverlay" class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center p-6">
     <div class="w-full max-w-sm text-center">
         <div class="w-24 h-24 bg-indigo-600 rounded-3xl mx-auto flex items-center justify-center text-white text-5xl mb-6 shadow-2xl shadow-indigo-300 rotate-6"><i class="fas fa-shapes"></i></div>
-        <h1 class="text-2xl font-bold text-slate-800">EduSmart Login</h1>
-        <p class="text-sm text-slate-500 mb-8">Portal Belajar Digital Terpadu</p>
+        <h1 class="text-2xl font-bold text-slate-800">E-Learning Login</h1>
+        <p class="text-sm text-slate-500 mb-8">Portal Belajar Digital SDN 04 Taman</p>
         <div class="space-y-4">
             <div class="relative">
                 <i class="fas fa-envelope absolute left-4 top-3.5 text-slate-400"></i>
-                <input type="email" id="emailInput" class="w-full bg-slate-50 border border-slate-200 p-3 pl-10 rounded-xl font-bold text-slate-700 outline-none focus:border-indigo-500 transition" placeholder="Email Sekolah">
+                <input type="email" id="emailInput" class="w-full bg-slate-50 border border-slate-200 p-3 pl-10 rounded-xl font-bold text-slate-700 outline-none focus:border-indigo-500 transition" placeholder="nama@sdn04taman.id">
             </div>
             <button onclick="doLogin()" class="w-full bg-indigo-600 text-white p-4 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex justify-center items-center gap-2">
                 MASUK SEKARANG <i class="fas fa-arrow-right"></i>
@@ -269,10 +269,10 @@ function initApp(){
     el('headName').innerText = USER.nama;
     el('headRole').innerText = USER.role;
     
-    // Setup UI Berdasarkan Role
-    if(USER.role === 'guru'){
-        el('welcomeRole').innerText = "Guru (Admin Kelas)";
-        el('iconMid').className = "fas fa-cog text-xl"; // Icon Gear untuk Guru
+    // Setup UI Berdasarkan Role: Admin atau Guru = Akses Admin Panel
+    if(USER.role === 'guru' || USER.role === 'admin'){
+        el('welcomeRole').innerText = "Guru & Admin Panel";
+        el('iconMid').className = "fas fa-cog text-xl"; // Icon Gear untuk Guru/Admin
         loadStatistik();
     } else {
         el('welcomeRole').innerText = "Ruang Belajar";
@@ -292,9 +292,10 @@ function navTo(page){
         el('viewHome').classList.remove('hidden');
         el('navHome').className = "nav-btn flex flex-col items-center gap-1 text-indigo-600 w-16 transition active:scale-95";
     } else if (page === 'fitur'){
-        if(USER.role === 'guru'){
+        // Logika untuk Admin atau Guru
+        if(USER.role === 'guru' || USER.role === 'admin'){
             el('viewGuru').classList.remove('hidden'); 
-            showGuruInput('nilai'); // Default buka menu nilai untuk guru
+            showGuruInput('nilai'); // Default buka menu nilai
         } else {
             el('viewSiswa').classList.remove('hidden'); 
             loadSiswaContent('materi'); // Default buka materi untuk siswa
