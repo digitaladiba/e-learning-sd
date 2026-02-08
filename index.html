@@ -89,8 +89,8 @@
             <p id="headName" class="text-xs font-bold text-slate-700">User</p>
             <p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p>
         </div>
-        <!-- FIX: Foto Profil Header -->
         <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200">
+            <!-- ID headImg akan diupdate lewat JS -->
             <img id="headImg" src="" class="w-full h-full object-cover">
         </div>
     </div>
@@ -99,7 +99,7 @@
   <!-- 4. KONTEN UTAMA -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
-    <!-- VIEW: BERANDA (FIXED DATA OPERATOR) -->
+    <!-- VIEW: BERANDA (HOME) -->
     <div id="viewHome" class="hidden fade-in space-y-5">
         <div class="hero-gradient rounded-3xl p-6 text-white shadow-lg shadow-fuchsia-200 relative overflow-hidden">
             <div class="relative z-10">
@@ -109,6 +109,7 @@
             <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
         </div>
         
+        <!-- Info Sekolah -->
         <div class="card-sd p-5 space-y-4 bg-white/80 backdrop-blur-sm border-fuchsia-100">
             <div class="flex items-center gap-3 border-b border-fuchsia-50 pb-3">
                 <div class="w-10 h-10 bg-fuchsia-100 rounded-full flex items-center justify-center text-fuchsia-600"><i class="fas fa-school"></i></div>
@@ -118,7 +119,6 @@
                 </div>
             </div>
             
-            <!-- UPDATE: Ganti Visi Misi jadi Operator -->
             <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3">
                 <div class="mt-1 text-blue-500"><i class="fas fa-user-tie"></i></div>
                 <div>
@@ -127,7 +127,6 @@
                 </div>
             </div>
 
-            <!-- UPDATE: Ganti Kontak jadi Email -->
             <div class="grid grid-cols-2 gap-3 text-xs">
                 <div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm">
                     <p class="font-bold text-slate-400 mb-1">Email</p>
@@ -139,7 +138,20 @@
                 </div>
             </div>
         </div>
-        <div id="listPengumuman" class="space-y-3"></div>
+
+        <!-- KALDIK (KALENDER PENDIDIKAN) -->
+        <div>
+            <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3>
+            <div id="listKaldik" class="space-y-3">
+                <div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div>
+            </div>
+        </div>
+
+        <!-- Pengumuman -->
+        <div>
+            <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3>
+            <div id="listPengumuman" class="space-y-3"></div>
+        </div>
     </div>
 
     <!-- VIEW: BERITA -->
@@ -158,7 +170,6 @@
             <button onclick="filterAkademik('Sumatif')" class="px-4 py-2 rounded-xl bg-white border border-red-100 text-xs font-bold text-red-600 hover:bg-red-50 transition whitespace-nowrap shadow-sm">📊 Sumatif</button>
             <button onclick="filterAkademik('ASAS')" class="px-4 py-2 rounded-xl bg-white border border-indigo-100 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap shadow-sm">📝 ASAS</button>
             <button onclick="filterAkademik('TKA')" class="px-4 py-2 rounded-xl bg-white border border-purple-100 text-xs font-bold text-purple-600 hover:bg-purple-50 transition whitespace-nowrap shadow-sm">💻 TKA</button>
-            <button onclick="filterAkademik('Kaldik')" class="px-4 py-2 rounded-xl bg-white border border-teal-100 text-xs font-bold text-teal-600 hover:bg-teal-50 transition whitespace-nowrap shadow-sm">📅 Kaldik</button>
         </div>
         <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition">
             <i class="fas fa-plus-circle"></i> Tambah Konten Baru
@@ -261,7 +272,9 @@
         <h3 class="font-bold text-lg mb-4 text-fuchsia-800">Upload Konten</h3>
         <div class="space-y-3">
             <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
-            <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select><select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPA</option><option>IPS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
+            <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select>
+            <!-- FIX: Tematik Diganti Basa Jawa -->
+            <select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPA</option><option>IPS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
             <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
             <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
             <input id="upDead" type="text" placeholder="Deadline / Keterangan" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
@@ -283,10 +296,12 @@
   </div>
 
 <script>
+// CONFIG
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
+// AUTH
 function doLogin(){
     const email = el('emailInput').value.trim();
     if(!email) return el('loginMsg').innerText = "Email wajib diisi";
@@ -302,17 +317,27 @@ function doLogin(){
 }
 function doLogout(){ location.reload(); }
 
+// INIT APP
 function initApp(){
+    // Set Profile Text
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
     el('headRole').innerText = USER.role;
     el('profilNama').innerText = USER.nama;
     el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
     
-    // FIX: FOTO PROFIL HEADER & UTAMA
-    const avatarUrl = USER.foto || (USER.role==='siswa' ? `https://api.dicebear.com/7.x/avataaars/svg?seed=${USER.nama}` : `https://api.dicebear.com/7.x/bottts/svg?seed=${USER.nama}`);
-    el('headImg').src = avatarUrl;
+    // FIX: Set Profile & Header Image Logic
+    let avatarUrl = "";
+    if(USER.foto && USER.foto !== "") {
+        avatarUrl = USER.foto;
+    } else if(USER.role==='siswa') {
+        avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${USER.nama}`;
+    } else {
+        avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${USER.nama}`;
+    }
+    
     el('profilImg').src = avatarUrl;
+    el('headImg').src = avatarUrl;
 
     if(USER.role === 'guru' || USER.role === 'admin'){
         el('menuGuruSide').classList.remove('hidden');
@@ -325,9 +350,12 @@ function initApp(){
         el('iconBotKhusus').className = "fas fa-clipboard-list text-xl mb-1";
         el('labelBotKhusus').innerText = "Mading";
     }
-    loadHome();
+    
+    // AUTO LOAD HOME (Tidak Blank Putih)
+    navTo('home');
 }
 
+// NAVIGATION
 function toggleSidebar(){
     const sb = el('sidebar');
     const ov = el('sidebarOverlay');
@@ -341,8 +369,17 @@ function navTo(page){
     
     ['navBotHome','navBotAkd','navBotKhusus'].forEach(id => el(id).className = "flex flex-col items-center w-16 text-slate-400 transition active:scale-95");
 
-    if(page==='home'){ el('viewHome').classList.remove('hidden'); el('navBotHome').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
-    else if(page==='akademik'){ el('viewAkademik').classList.remove('hidden'); loadAkademik('Materi'); el('navBotAkd').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
+    if(page==='home'){ 
+        el('viewHome').classList.remove('hidden'); 
+        el('navBotHome').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95";
+        loadHome();
+        loadKaldik();
+    }
+    else if(page==='akademik'){ 
+        el('viewAkademik').classList.remove('hidden'); 
+        loadAkademik('Materi'); 
+        el('navBotAkd').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95";
+    }
     else if(page==='nilaiGuru'){ el('viewNilaiGuru').classList.remove('hidden'); el('navBotKhusus').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
     else if(page==='nilaiSiswa'){ el('viewNilaiSiswa').classList.remove('hidden'); loadLeaderboard(); }
     else if(page==='mading'){ el('viewMading').classList.remove('hidden'); loadMading(); el('navBotKhusus').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
@@ -356,20 +393,38 @@ function navToMenuKhusus(){
     else navTo('mading');
 }
 
+// HOME & BERITA
 function loadHome(){
     fetch(`${API_URL}?action=home`).then(r=>r.json()).then(d=>{
         el('infoNama').innerText = d.info.nama;
         el('infoAlamat').innerText = d.info.alamat;
-        el('infoOperator').innerText = d.info.operator; // Nama Operator
-        el('infoEmail').innerText = d.info.email;       // Email
+        el('infoOperator').innerText = d.info.operator;
+        el('infoEmail').innerText = d.info.email;
         el('infoWeb').innerText = d.info.web;
         window.CACHE_BERITA = d.pengumuman;
         el('listPengumuman').innerHTML = renderBerita(d.pengumuman);
     });
 }
+function loadKaldik(){
+    el('listKaldik').innerHTML = "<div class='text-center py-4'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
+    fetch(`${API_URL}?action=akademik&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{
+        const kaldik = d.data.filter(item => item.tipe === 'Kaldik');
+        if(kaldik.length){
+            el('listKaldik').innerHTML = kaldik.map(i => `
+                <a href="${i.link}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50">
+                    <div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div>
+                    <div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Klik untuk lihat detail</p></div>
+                </a>
+            `).join('');
+        } else {
+            el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`;
+        }
+    });
+}
 function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function renderBerita(data){ return data.map(p => `<div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm"><span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">${p.tanggal}</span><h4 class="font-bold text-sm text-slate-800 mt-1">${p.judul}</h4><p class="text-xs text-slate-500 mt-1">${p.isi}</p></div>`).join('') || "<p class='text-center text-xs text-slate-400'>Tidak ada pengumuman.</p>"; }
 
+// AKADEMIK
 function filterAkademik(tipe){ loadAkademik(tipe); }
 function loadAkademik(tipe){
     el('listAkademik').innerHTML = "<div class='text-center py-10'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
@@ -396,6 +451,7 @@ function submitAkademik(){
     fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{ el('btnSimpanAkd').innerText = "Simpan"; alert(d.message); el('modalUpload').classList.add('hidden'); loadAkademik(p.tipe); });
 }
 
+// NILAI & OTHERS
 function loadSiswaDropdown(){
     const k = el('inKelas').value;
     if(!k) return alert("Isi kelas!");
@@ -419,7 +475,6 @@ function loadLeaderboard(){
         el('riwayatNilai').innerHTML = d.data.map(n => `<div class="bg-white p-3 rounded-xl border border-fuchsia-50 flex justify-between items-center shadow-sm"><div><span class="text-[9px] font-bold bg-fuchsia-50 text-fuchsia-600 px-2 py-0.5 rounded uppercase">${n.kategori} • ${n.mapel}</span><h4 class="font-bold text-sm mt-1 text-slate-700">${n.judul}</h4></div><div class="text-lg font-bold ${n.nilai>=75?'text-green-600':'text-red-500'}">${n.nilai}</div></div>`).join('');
     });
 }
-
 function loadMading(){
     fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{
         const top = d.data[0];
