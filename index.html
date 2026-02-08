@@ -4,30 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>LMS SDN 04 Taman</title>
-  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
   <style>
-    body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
+    body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    
     .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
     .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
-
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
-    
     .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Embed Container */
-    .embed-container { position: relative; padding-bottom: 75%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #fff; border: 1px solid #e2e8f0; }
-    .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-    
+    /* FIX IFRAME UNTUK HTML EMBED */
+    .game-viewer {
+        width: 100%;
+        height: 500px;
+        background: #fff;
+        border: 2px solid #e879f9;
+        border-radius: 12px;
+        margin-top: 10px;
+        overflow: hidden;
+    }
+    .game-viewer iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -35,7 +42,7 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR -->
+  <!-- SIDEBAR -->
   <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()"><i class="fas fa-bars text-xl"></i></div>
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
@@ -62,13 +69,13 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- 3. HEADER -->
+  <!-- HEADER -->
   <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
     <div class="flex items-center gap-2"><div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div><span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04</span></div>
     <div class="flex items-center gap-2"><div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div><div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200"><img id="headImg" src="" class="w-full h-full object-cover"></div></div>
   </header>
 
-  <!-- 4. KONTEN -->
+  <!-- KONTEN -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
@@ -94,7 +101,7 @@
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     </div>
 
-    <!-- AKADEMIK -->
+    <!-- AKADEMIK (FIX: HTML Embed) -->
     <div id="viewAkademik" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -120,14 +127,13 @@
     
     <!-- PROFIL -->
     <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
-
   </main>
 
-  <!-- 5. MENU BAWAH -->
+  <!-- MENU BAWAH -->
   <nav class="bg-white border-t border-fuchsia-100 h-16 fixed bottom-0 w-full flex justify-around items-center z-30 pb-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
-    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
-    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
-    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
+    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
+    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
+    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
   </nav>
 
   <!-- MODAL UPLOAD -->
@@ -233,7 +239,6 @@ function navTo(page){
 }
 function navToMenuKhusus(){ if(USER.role === 'guru' || USER.role === 'admin') navTo('nilaiGuru'); else navTo('mading'); }
 
-// DATA LOADING
 function loadHome(){
     fetch(`${API_URL}?action=home`).then(r=>r.json()).then(d=>{
         el('infoNama').innerText = d.info.nama; el('infoAlamat').innerText = d.info.alamat;
@@ -243,14 +248,12 @@ function loadHome(){
 }
 function loadKaldik(){
     el('listKaldik').innerHTML = "<div class='text-center py-4'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
-    // Kaldik selalu ambil semua (tanpa filter kelas)
-    fetch(`${API_URL}?action=akademik&kelas=${USER.kelas}&role=${USER.role}`).then(r=>r.json()).then(d=>{
-        const kaldik = d.data.filter(item => item.tipe === 'Kaldik' || item.tipe === 'kaldik');
+    fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{
+        const kaldik = d.data.filter(item => item.kategori === 'Kaldik' || item.kategori === 'kaldik');
         if(kaldik.length){
             el('listKaldik').innerHTML = kaldik.map(i => {
-                const linkContent = i.konten || i.link || '';
-                // Render HTML untuk Kaldik
-                if(linkContent.trim().startsWith('<')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container">${linkContent}</div></div>`;
+                const linkContent = i.link || '';
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container">${linkContent}</div></div>`;
                 return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
             }).join('');
         } else { el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
@@ -259,7 +262,7 @@ function loadKaldik(){
 function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function renderBerita(data){ return data.map(p => `<div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm"><span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">${p.tanggal}</span><h4 class="font-bold text-sm text-slate-800 mt-1">${p.judul}</h4><p class="text-xs text-slate-500 mt-1">${p.isi}</p></div>`).join('') || "<p class='text-center text-xs text-slate-400'>Tidak ada pengumuman.</p>"; }
 
-// AKADEMIK (RENDER HTML / LINK / DELETE)
+// AKADEMIK (FIX: HTML EMBED)
 function filterAkademik(tipe){ loadAkademik(tipe); }
 function loadAkademik(tipe){
     el('listAkademik').innerHTML = "<div class='text-center py-10'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
@@ -270,9 +273,9 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
-                // RENDER HTML EMBED (GAME/KUIS)
-                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
-                    // Pakai escape untuk srcdoc
+                // FIX: RENDER HTML EMBED DENGAN SRCDOC AGAR AMAN & JALAN
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
+                    // Escape kutip untuk srcdoc
                     const safeHtml = linkContent.replace(/'/g, "&apos;");
                     return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
                         <div class="flex justify-between items-center mb-2">
@@ -280,17 +283,17 @@ function loadAkademik(tipe){
                             <span class="text-[9px] font-bold text-red-500">${i.deadline||''}</span>
                         </div>
                         <h4 class="font-bold text-slate-800 text-sm mb-2">${i.judul}</h4>
-                        <div class="embed-container">
-                            <iframe srcdoc='${safeHtml}' style="width:100%;height:100%;border:0;"></iframe>
+                        <div class="game-viewer">
+                            <iframe srcdoc='${safeHtml}' sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
                         </div>
                     </div>`;
                 }
-                // RENDER LINK BIASA
                 return `<div class="block bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm hover:border-fuchsia-400 transition relative overflow-hidden group"><div class="absolute top-0 right-0 bg-fuchsia-50 text-fuchsia-600 text-[9px] px-2 py-1 rounded-bl-lg font-bold">${i.deadline || ''}</div><div class="flex items-center gap-3"><a href="${linkContent}" target="_blank" class="w-10 h-10 bg-fuchsia-50 text-fuchsia-600 rounded-full flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition"><i class="fas fa-book-open"></i></a><div><span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span><h4 class="font-bold text-slate-800 text-sm leading-tight mt-0.5"><a href="${linkContent}" target="_blank">${i.judul}</a></h4></div></div></div>`;
             }).join('');
         } else { el('listAkademik').innerHTML = `<div class="text-center py-10 text-slate-400 text-xs border-2 border-dashed border-fuchsia-100 rounded-xl">Belum ada konten ${tipe}</div>`; }
     });
 }
+
 function showModalUpload(){ el('modalUpload').classList.remove('hidden'); }
 function submitAkademik(){
     const htmlVal = el('upHtml').value;
