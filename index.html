@@ -13,7 +13,6 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Tombol Sidebar Melayang (Kiri Tengah) */
     .btn-side-float {
         position: fixed; top: 50%; left: 0; transform: translateY(-50%);
         background: #c026d3; color: white;
@@ -24,7 +23,6 @@
     }
     .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
 
-    /* Sidebar Panel */
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
     
@@ -33,9 +31,21 @@
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Responsive Embed Container */
-    .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f0fdf4; }
-    .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    /* Container untuk Embed HTML Responsif */
+    .embed-container { 
+        position: relative; 
+        padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+        height: 0; 
+        overflow: hidden; 
+        max-width: 100%; 
+        border-radius: 12px; 
+        margin-top: 10px; 
+        background: #fdf4ff;
+        border: 1px solid #e879f9;
+    }
+    .embed-container iframe, .embed-container object, .embed-container embed { 
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; 
+    }
 
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -44,12 +54,12 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. TOMBOL SIDEBAR MELAYANG -->
+  <!-- 1. TOMBOL SIDEBAR -->
   <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()">
     <i class="fas fa-bars text-xl"></i>
   </div>
 
-  <!-- 2. SIDEBAR MENU LENGKAP -->
+  <!-- 2. SIDEBAR MENU -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div>
@@ -63,7 +73,6 @@
         <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
         <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
         
-        <!-- Menu Dinamis -->
         <div id="menuGuruSide" class="hidden">
             <button onclick="navTo('nilaiGuru')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-star w-6 text-center text-orange-500"></i> Input Nilai</button>
         </div>
@@ -102,7 +111,7 @@
   <!-- 4. KONTEN UTAMA -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
-    <!-- VIEW: BERANDA (HOME) -->
+    <!-- BERANDA -->
     <div id="viewHome" class="hidden fade-in space-y-5">
         <div class="hero-gradient rounded-3xl p-6 text-white shadow-lg shadow-fuchsia-200 relative overflow-hidden">
             <div class="relative z-10">
@@ -112,7 +121,6 @@
             <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
         </div>
         
-        <!-- Info Sekolah -->
         <div class="card-sd p-5 space-y-4 bg-white/80 backdrop-blur-sm border-fuchsia-100">
             <div class="flex items-center gap-3 border-b border-fuchsia-50 pb-3">
                 <div class="w-10 h-10 bg-fuchsia-100 rounded-full flex items-center justify-center text-fuchsia-600"><i class="fas fa-school"></i></div>
@@ -131,37 +139,29 @@
             </div>
 
             <div class="grid grid-cols-2 gap-3 text-xs">
-                <div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm">
-                    <p class="font-bold text-slate-400 mb-1">Email</p>
-                    <p class="font-medium text-slate-700 truncate" id="infoEmail">-</p>
-                </div>
-                <div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm">
-                    <p class="font-bold text-slate-400 mb-1">Website</p>
-                    <p class="font-medium text-blue-500 truncate" id="infoWeb">-</p>
-                </div>
+                <div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Email</p><p class="font-medium text-slate-700 truncate" id="infoEmail">-</p></div>
+                <div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Website</p><p class="font-medium text-blue-500 truncate" id="infoWeb">-</p></div>
             </div>
         </div>
 
-        <!-- KALDIK -->
         <div>
             <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3>
             <div id="listKaldik" class="space-y-3"></div>
         </div>
 
-        <!-- Pengumuman -->
         <div>
             <h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3>
             <div id="listPengumuman" class="space-y-3"></div>
         </div>
     </div>
 
-    <!-- VIEW: BERITA -->
+    <!-- BERITA -->
     <div id="viewBerita" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Berita & Pengumuman</h2>
         <div id="listBerita" class="space-y-3"></div>
     </div>
 
-    <!-- VIEW: AKADEMIK -->
+    <!-- AKADEMIK -->
     <div id="viewAkademik" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -178,7 +178,7 @@
         <div id="listAkademik" class="space-y-3 min-h-[200px]"></div>
     </div>
 
-    <!-- VIEW: NILAI GURU -->
+    <!-- NILAI GURU -->
     <div id="viewNilaiGuru" class="hidden fade-in space-y-4">
         <div class="card-sd p-5 border-l-4 border-fuchsia-500 shadow-fuchsia-100">
             <h3 class="font-bold text-lg mb-4 text-fuchsia-800">Input Nilai Siswa</h3>
@@ -197,7 +197,7 @@
         </div>
     </div>
 
-    <!-- VIEW: NILAI SISWA -->
+    <!-- NILAI SISWA -->
     <div id="viewNilaiSiswa" class="hidden fade-in space-y-6">
         <div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden">
             <div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div>
@@ -210,7 +210,7 @@
         </div>
     </div>
 
-    <!-- VIEW: MADING -->
+    <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2>
         <div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm">
@@ -229,13 +229,12 @@
         </div>
     </div>
 
-    <!-- VIEW: PERPUS -->
+    <!-- PERPUS & PROFIL -->
     <div id="viewPerpus" class="hidden fade-in">
         <h2 class="text-xl font-bold mb-4 text-blue-800">Perpustakaan Digital</h2>
         <div id="listPerpus" class="grid grid-cols-2 gap-3"></div>
     </div>
 
-    <!-- VIEW: PROFIL -->
     <div id="viewProfil" class="hidden fade-in">
         <div class="text-center mt-6">
             <div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200">
@@ -267,36 +266,27 @@
     </button>
   </nav>
 
-  <!-- MODAL UPLOAD (FIXED: MAPEL IPAS & BASA JAWA) -->
+  <!-- MODAL UPLOAD -->
   <div id="modalUpload" class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
     <div class="bg-white rounded-2xl p-5 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl">
         <h3 class="font-bold text-lg mb-4 text-fuchsia-800">Upload Konten</h3>
         <div class="space-y-3">
             <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
-            
             <div class="grid grid-cols-2 gap-2">
                 <select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select>
-                
-                <!-- UPDATE MAPEL: IPAS & BASA JAWA -->
+                <!-- UPDATE MAPEL -->
                 <select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
-                    <option>Matematika</option>
-                    <option>B. Indonesia</option>
-                    <option>IPAS</option>
-                    <option>PKN</option>
-                    <option>PAI</option>
-                    <option>PJOK</option>
-                    <option>Seni</option>
-                    <option>Inggris</option>
-                    <option>Basa Jawa</option>
+                    <option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option>
                 </select>
             </div>
-            
             <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
             
             <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
             
-            <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML/Embed:</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none" placeholder="<iframe src='...'></iframe>"></textarea></div>
+            <!-- KOLOM HTML EMBED -->
+            <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML/Embed (Untuk Quizizz/AI):</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none" placeholder="<iframe src='...'></iframe>"></textarea></div>
 
+            <!-- DEADLINE DATE PICKER -->
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Deadline / Waktu:</p><input id="upDead" type="date" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none text-slate-600"></div>
             
             <div class="flex gap-2 mt-4"><button onclick="document.getElementById('modalUpload').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-bold text-sm">Batal</button><button onclick="submitAkademik()" id="btnSimpanAkd" class="flex-1 bg-fuchsia-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-fuchsia-700 shadow-md">Simpan</button></div>
@@ -360,7 +350,6 @@ function initApp(){
     el('profilNama').innerText = USER.nama;
     el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
     
-    // FIX: Sinkronisasi Foto Profil
     let avatarUrl = "";
     if(USER.foto && USER.foto.startsWith("http")) avatarUrl = USER.foto; 
     else if(USER.role==='siswa') avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${USER.nama}`;
@@ -379,7 +368,6 @@ function initApp(){
         el('labelBotKhusus').innerText = "Mading";
     }
     
-    // Auto Load Home
     navTo('home');
 }
 
