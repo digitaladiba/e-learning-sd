@@ -15,31 +15,15 @@
     
     .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
     .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
-
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
-    
     .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Container untuk Menjalankan HTML/Game */
-    .game-viewer {
-        width: 100%;
-        height: 450px; /* Tinggi area bermain */
-        background: #fafafa;
-        border: 2px solid #e879f9;
-        border-radius: 12px;
-        margin-top: 10px;
-        overflow: hidden;
-        position: relative;
-    }
-    .game-viewer iframe {
-        width: 100%;
-        height: 100%;
-        border: none;
-    }
+    .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
+    .embed-container iframe, .embed-container object, .embed-container embed { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -75,13 +59,13 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- HEADER -->
+  <!-- 3. HEADER -->
   <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
     <div class="flex items-center gap-2"><div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div><span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04</span></div>
     <div class="flex items-center gap-2"><div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div><div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200"><img id="headImg" src="" class="w-full h-full object-cover"></div></div>
   </header>
 
-  <!-- KONTEN -->
+  <!-- 4. KONTEN -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
@@ -107,7 +91,7 @@
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     </div>
 
-    <!-- AKADEMIK (HTML EMBED WORKS HERE) -->
+    <!-- AKADEMIK (FIX: TOMBOL FULLSCREEN GAME) -->
     <div id="viewAkademik" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -118,31 +102,23 @@
             <button onclick="filterAkademik('ASAS')" class="px-4 py-2 rounded-xl bg-white border border-indigo-100 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap shadow-sm">📝 ASAS</button>
             <button onclick="filterAkademik('TKA')" class="px-4 py-2 rounded-xl bg-white border border-purple-100 text-xs font-bold text-purple-600 hover:bg-purple-50 transition whitespace-nowrap shadow-sm">💻 TKA</button>
         </div>
-        <!-- Tombol Tambah hanya utk Guru/Admin -->
-        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition">
-            <i class="fas fa-plus-circle"></i> Tambah Konten Baru
-        </button>
+        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition"><i class="fas fa-plus-circle"></i> Tambah Konten Baru</button>
         <div id="listAkademik" class="space-y-3 min-h-[200px]"></div>
     </div>
 
     <!-- NILAI GURU -->
     <div id="viewNilaiGuru" class="hidden fade-in space-y-4"><div class="card-sd p-5 border-l-4 border-fuchsia-500 shadow-fuchsia-100"><h3 class="font-bold text-lg mb-4 text-fuchsia-800">Input Nilai Siswa</h3><div class="space-y-3"><div class="flex gap-2"><input id="inKelas" type="number" placeholder="Kelas" class="w-20 p-2 border border-fuchsia-200 rounded-lg text-center font-bold text-fuchsia-700 outline-none"><button onclick="loadSiswaDropdown()" class="flex-1 bg-fuchsia-600 text-white rounded-lg font-bold text-xs hover:bg-fuchsia-700 transition">Cari Siswa</button></div><select id="inSiswa" class="w-full p-2 border border-fuchsia-200 rounded-lg bg-fuchsia-50 font-bold text-fuchsia-800"><option>Pilih Siswa...</option></select><div class="grid grid-cols-2 gap-2"><select id="inKategori" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><option value="Sumatif">Sumatif</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option></select><input id="inMapel" type="text" placeholder="Mapel" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"></div><input id="inJudul" type="text" placeholder="Judul Penilaian" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><input id="inNilai" type="number" placeholder="Nilai (0-100)" class="w-full p-2 border border-fuchsia-200 rounded-lg font-bold text-lg text-fuchsia-600"><input id="inCatatan" type="text" placeholder="Saran / Catatan" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><button onclick="submitNilai()" id="btnSimpanNilai" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">SIMPAN NILAI</button></div></div></div>
-    
-    <!-- NILAI SISWA -->
     <div id="viewNilaiSiswa" class="hidden fade-in space-y-6"><div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden"><div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div><h3 class="font-bold text-yellow-400 uppercase tracking-widest text-xs mb-4 relative z-10">Papan Juara Kelas</h3><div id="top3Container" class="flex justify-center items-end gap-4 relative z-10"><p class="text-xs opacity-60">Memuat...</p></div></div><div class="space-y-3"><h3 class="font-bold text-fuchsia-800">Riwayat Nilai Saya</h3><div id="riwayatNilai" class="space-y-2"></div></div></div>
-    
-    <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
-    
-    <!-- PROFIL -->
+    <div id="viewPerpus" class="hidden fade-in"><h2 class="text-xl font-bold mb-4 text-blue-800">Perpustakaan Digital</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
   </main>
 
   <!-- MENU BAWAH -->
   <nav class="bg-white border-t border-fuchsia-100 h-16 fixed bottom-0 w-full flex justify-around items-center z-30 pb-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
-    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
-    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
-    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
+    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
+    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
+    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
   </nav>
 
   <!-- MODAL UPLOAD -->
@@ -150,20 +126,11 @@
     <div class="bg-white rounded-2xl p-5 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl">
         <h3 class="font-bold text-lg mb-4 text-fuchsia-800">Upload Konten</h3>
         <div class="space-y-3">
-            <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option></select>
-            <div class="grid grid-cols-2 gap-2">
-                <select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select>
-                <select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select>
-            </div>
+            <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
+            <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select><select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
             <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
-            
             <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
-            
-            <div class="relative">
-                <p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML Embed (Kuis AI/Game):</p>
-                <textarea id="upHtml" rows="5" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none placeholder-slate-400" placeholder='<iframe src="..."></iframe>'></textarea>
-            </div>
-
+            <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML Embed:</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none placeholder-slate-400" placeholder='<iframe src="..."></iframe>'></textarea></div>
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Deadline:</p><input id="upDead" type="date" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none text-slate-600"></div>
             <div class="flex gap-2 mt-4"><button onclick="document.getElementById('modalUpload').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-bold text-sm">Batal</button><button onclick="submitAkademik()" id="btnSimpanAkd" class="flex-1 bg-fuchsia-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-fuchsia-700 shadow-md">Simpan</button></div>
         </div>
@@ -183,11 +150,13 @@
   </div>
 
 <script>
+// GLOBAL CACHE UNTUK RAW CONTENT HTML
+let RAW_CONTENTS = {};
+
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
-// AUTH
 const savedUser = localStorage.getItem('lmsUserV4');
 if(savedUser){
     USER = JSON.parse(savedUser);
@@ -212,7 +181,6 @@ function doLogin(){
 }
 function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV4'); location.reload(); } }
 
-// INIT
 function initApp(){
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
@@ -256,6 +224,7 @@ function navTo(page){
 }
 function navToMenuKhusus(){ if(USER.role === 'guru' || USER.role === 'admin') navTo('nilaiGuru'); else navTo('mading'); }
 
+// DATA
 function loadHome(){
     fetch(`${API_URL}?action=home`).then(r=>r.json()).then(d=>{
         el('infoNama').innerText = d.info.nama; el('infoAlamat').innerText = d.info.alamat;
@@ -270,8 +239,7 @@ function loadKaldik(){
         if(kaldik.length){
             el('listKaldik').innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                // Render HTML untuk Kaldik
-                if(linkContent.trim().startsWith('<')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="game-viewer"><iframe srcdoc='${linkContent.replace(/'/g, "&apos;")}' style="width:100%;height:100%;border:0;"></iframe></div></div>`;
+                if(linkContent.trim().startsWith('<')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container">${linkContent}</div></div>`;
                 return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
             }).join('');
         } else { el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
@@ -280,7 +248,7 @@ function loadKaldik(){
 function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function renderBerita(data){ return data.map(p => `<div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm"><span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">${p.tanggal}</span><h4 class="font-bold text-sm text-slate-800 mt-1">${p.judul}</h4><p class="text-xs text-slate-500 mt-1">${p.isi}</p></div>`).join('') || "<p class='text-center text-xs text-slate-400'>Tidak ada pengumuman.</p>"; }
 
-// AKADEMIK (RENDER HTML / LINK / DELETE)
+// AKADEMIK (HTML LINK CONVERTER)
 function filterAkademik(tipe){ loadAkademik(tipe); }
 function loadAkademik(tipe){
     el('listAkademik').innerHTML = "<div class='text-center py-10'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
@@ -291,25 +259,55 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
-                // RENDER HTML EMBED (GAME/KUIS)
-                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
+                // Simpan Konten Mentah ke Cache untuk dibuka di Tab Baru
+                RAW_CONTENTS[i.id] = linkContent;
+
+                // TAMPILAN PREVIEW (IFRAME)
+                let previewHtml = "";
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
+                     // Bersihkan kutip untuk srcdoc preview
                     const safeHtml = linkContent.replace(/'/g, "&apos;");
-                    return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
-                            <span class="text-[9px] font-bold text-red-500">${i.deadline||''}</span>
-                        </div>
-                        <h4 class="font-bold text-slate-800 text-sm mb-2">${i.judul}</h4>
-                        <div class="game-viewer">
-                            <iframe srcdoc='${safeHtml}' sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
-                        </div>
+                    previewHtml = `
+                    <div class="embed-container">
+                        <iframe srcdoc='${safeHtml}' sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+                    </div>
+                    <button onclick="openHtmlFullscreen('${i.id}')" class="mt-2 w-full bg-indigo-600 text-white py-2 rounded-lg text-xs font-bold shadow hover:bg-indigo-700 transition">
+                        <i class="fas fa-expand mr-1"></i> Buka Layar Penuh (Mainkan)
+                    </button>`;
+                } else {
+                    // TAMPILAN LINK BIASA
+                    previewHtml = `
+                    <div class="flex items-center gap-3 mt-2">
+                        <a href="${linkContent}" target="_blank" class="w-10 h-10 bg-fuchsia-50 text-fuchsia-600 rounded-full flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition"><i class="fas fa-external-link-alt"></i></a>
+                        <a href="${linkContent}" target="_blank" class="text-xs font-bold text-blue-600 underline">Buka Link Materi</a>
                     </div>`;
                 }
-                return `<div class="block bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm hover:border-fuchsia-400 transition relative overflow-hidden group"><div class="absolute top-0 right-0 bg-fuchsia-50 text-fuchsia-600 text-[9px] px-2 py-1 rounded-bl-lg font-bold">${i.deadline || ''}</div><div class="flex items-center gap-3"><a href="${linkContent}" target="_blank" class="w-10 h-10 bg-fuchsia-50 text-fuchsia-600 rounded-full flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition"><i class="fas fa-book-open"></i></a><div><span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span><h4 class="font-bold text-slate-800 text-sm leading-tight mt-0.5"><a href="${linkContent}" target="_blank">${i.judul}</a></h4></div></div></div>`;
+
+                return `
+                <div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
+                        <span class="text-[9px] font-bold text-red-500">${i.deadline||''}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-sm">${i.judul}</h4>
+                    ${previewHtml}
+                </div>`;
             }).join('');
         } else { el('listAkademik').innerHTML = `<div class="text-center py-10 text-slate-400 text-xs border-2 border-dashed border-fuchsia-100 rounded-xl">Belum ada konten ${tipe}</div>`; }
     });
 }
+
+// FUNGSI MEMBUKA HTML DI TAB BARU (FULLSCREEN GAME)
+function openHtmlFullscreen(id) {
+    const content = RAW_CONTENTS[id];
+    if(!content) return alert("Konten tidak ditemukan!");
+    
+    // Buat Blob (File Virtual) dari kode HTML
+    const blob = new Blob([content], {type: 'text/html'});
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+}
+
 function showModalUpload(){ el('modalUpload').classList.remove('hidden'); }
 function submitAkademik(){
     const htmlVal = el('upHtml').value;
