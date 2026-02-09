@@ -22,14 +22,13 @@
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Responsive Embed Container */
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     
-    /* Container Game HTML (Lebih Tinggi) */
+    /* Container untuk Kuis/Game Full HTML */
     .game-viewer { width: 100%; height: 500px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
     .game-viewer iframe { width: 100%; height: 100%; border: none; }
-
+    
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -37,7 +36,7 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR -->
+  <!-- SIDEBAR -->
   <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()"><i class="fas fa-bars text-xl"></i></div>
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
@@ -97,7 +96,7 @@
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     </div>
 
-    <!-- AKADEMIK (HTML EMBED FIX) -->
+    <!-- AKADEMIK -->
     <div id="viewAkademik" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -129,9 +128,9 @@
 
   <!-- MENU BAWAH -->
   <nav class="bg-white border-t border-fuchsia-100 h-16 fixed bottom-0 w-full flex justify-around items-center z-30 pb-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
-    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
-    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
-    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
+    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
+    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
+    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
   </nav>
 
   <!-- MODAL UPLOAD -->
@@ -142,7 +141,7 @@
             <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
             <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select><select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
             <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
-            <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
+            <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL (Video/Drive)" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML Embed:</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none placeholder-slate-400" placeholder='<iframe src="..."></iframe>'></textarea></div>
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Deadline:</p><input id="upDead" type="date" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none text-slate-600"></div>
             <div class="flex gap-2 mt-4"><button onclick="document.getElementById('modalUpload').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-bold text-sm">Batal</button><button onclick="submitAkademik()" id="btnSimpanAkd" class="flex-1 bg-fuchsia-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-fuchsia-700 shadow-md">Simpan</button></div>
@@ -248,11 +247,8 @@ function loadKaldik(){
         if(kaldik.length){
             el('listKaldik').innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                // RENDER HTML EMBED (KALDIK)
-                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
-                    // Gunakan srcdoc agar aman
-                    return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe srcdoc='${linkContent.replace(/'/g, "&apos;")}' style="width:100%;height:100%;border:0;"></iframe></div></div>`;
-                }
+                // Render HTML untuk Kaldik
+                if(linkContent.trim().startsWith('<')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container">${linkContent}</div></div>`;
                 return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
             }).join('');
         } else { el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
@@ -271,10 +267,9 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
-                // RENDER HTML GAME/KUIS/EMBED
-                // Cek apakah ada tag HTML atau iframe
+                // RENDER HTML EMBED (GAME/KUIS)
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
-                    const safeHtml = linkContent.replace(/'/g, "&apos;"); // Escape kutip
+                    const safeHtml = linkContent.replace(/'/g, "&apos;");
                     return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
@@ -316,7 +311,7 @@ function submitNilai(){ const p = { action: 'simpan_nilai', email: el('inSiswa')
 function loadLeaderboard(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top3 = d.data; if(top3.length){ el('top3Container').innerHTML = `${top3[1] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-2"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[1].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[1].rata}</p></div>` : ''}<div class="text-center w-1/3 mb-6"><i class="fas fa-medal text-5xl medal-1 animate-bounce"></i><p class="text-xs font-bold text-yellow-300 mt-1 truncate">${top3[0].nama}</p><span class="text-xs font-bold bg-white text-slate-900 px-2 rounded-full shadow-lg">${top3[0].rata}</span></div>${top3[2] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-3"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[2].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[2].rata}</p></div>` : ''}`; } else { el('top3Container').innerHTML = "<p class='text-xs opacity-50 text-white'>Belum ada data</p>"; } }); fetch(`${API_URL}?action=nilai&email=${USER.email}`).then(r=>r.json()).then(d=>{ el('riwayatNilai').innerHTML = d.data.map(n => `<div class="bg-white p-3 rounded-xl border border-fuchsia-50 flex justify-between items-center shadow-sm"><div><span class="text-[9px] font-bold bg-fuchsia-50 text-fuchsia-600 px-2 py-0.5 rounded uppercase">${n.kategori} • ${n.mapel}</span><h4 class="font-bold text-sm mt-1 text-slate-700">${n.judul}</h4></div><div class="text-lg font-bold ${n.nilai>=75?'text-green-600':'text-red-500'}">${n.nilai}</div></div>`).join(''); }); }
 function loadMading(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top = d.data[0]; el('madingJuara').innerText = top ? `🏆 ${top.nama} (Rata-rata: ${top.rata})` : "Belum ada juara."; }); el('madingInfo').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function loadPerpus(){ el('listPerpus').innerHTML = "Memuat..."; fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{ 
-    const books = d.data.filter(item => item.kategori !== 'Kaldik' && item.kategori !== 'kaldik');
+    const books = d.data.filter(item => item.kategori !== 'Kaldik');
     el('listPerpus').innerHTML = books.map(b => `<a href="${b.link}" target="_blank" class="block bg-white p-4 rounded-xl border border-fuchsia-100 text-center hover:shadow-md transition"><i class="fas fa-book-reader text-3xl text-fuchsia-400 mb-2"></i><h4 class="font-bold text-xs line-clamp-2 text-slate-700">${b.judul}</h4><span class="text-[10px] text-slate-400 bg-slate-50 px-2 rounded mt-1 inline-block">${b.kategori}</span></a>`).join(''); 
 }); }
 function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV4', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
