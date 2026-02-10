@@ -13,7 +13,7 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Sidebar Animasi */
+    /* Animasi Sidebar */
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
     
@@ -46,7 +46,7 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR MENU LENGKAP (Hidden by Default) -->
+  <!-- 1. SIDEBAR MENU LENGKAP -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
@@ -76,12 +76,10 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- 2. HEADER UTAMA -->
+  <!-- 2. HEADER -->
   <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
-    
-    <!-- KIRI: HAMBURGER & LOGO -->
     <div class="flex items-center gap-3">
-        <!-- TOMBOL HAMBURGER (PERBAIKAN: Di Samping Logo) -->
+        <!-- TOMBOL HAMBURGER -->
         <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-fuchsia-50 hover:text-fuchsia-600 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
             <i class="fas fa-bars text-2xl"></i>
         </button>
@@ -95,7 +93,7 @@
         </div>
     </div>
     
-    <!-- KANAN: PROFIL -->
+    <!-- Profil Kanan Atas -->
     <div class="flex items-center gap-3">
         <div class="text-right hidden sm:block">
             <p id="headName" class="text-xs font-bold text-slate-700">User</p>
@@ -113,10 +111,7 @@
     <!-- HOME -->
     <div id="viewHome" class="hidden fade-in space-y-5">
         <div class="hero-gradient rounded-3xl p-6 text-white shadow-lg shadow-fuchsia-200 relative overflow-hidden">
-            <div class="relative z-10">
-                <h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2>
-                <p class="text-fuchsia-50 text-sm font-medium">Selamat datang di Portal Digital SDN 04 Taman.</p>
-            </div>
+            <div class="relative z-10"><h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2><p class="text-fuchsia-50 text-sm font-medium">Selamat datang di Portal Digital SDN 04 Taman.</p></div>
             <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
         </div>
         <div class="card-sd p-5 space-y-4 bg-white/80 backdrop-blur-sm border-fuchsia-100">
@@ -203,17 +198,15 @@
   </div>
 
 <script>
-// CONFIG
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
-// AUTH
 const savedUser = localStorage.getItem('lmsUserV4');
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // el('sidebarToggle').classList.remove('hidden'); // Menu di Header, jadi tidak perlu
+    // el('sidebarToggle').classList.remove('hidden'); 
     initApp();
 }
 
@@ -226,13 +219,13 @@ function doLogin(){
             USER = d;
             localStorage.setItem('lmsUserV4', JSON.stringify(d)); 
             el('loginOverlay').classList.add('hidden');
+            el('sidebarToggle').classList.remove('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
 }
 function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV4'); location.reload(); } }
 
-// INIT
 function initApp(){
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
@@ -246,7 +239,7 @@ function initApp(){
         avatarUrl = USER.foto;
     } else {
         const seed = USER.nama.replace(/ /g, '');
-        // Default Laki-laki jika gender kosong/undefined
+        // Default Laki-laki jika gender kosong
         const gender = (USER.gender || "L").toUpperCase();
         let options = "";
         
@@ -323,7 +316,6 @@ function loadKaldik(isHome){
         if(kaldik.length){
             container.innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                // Render HTML untuk Kaldik
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const url = URL.createObjectURL(blob);
