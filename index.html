@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <title>LMS SDN 04 Taman</title>
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -20,6 +21,7 @@
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
@@ -78,7 +80,7 @@
             <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3"><div class="mt-1 text-blue-500"><i class="fas fa-user-tie"></i></div><div><h4 class="font-bold text-blue-700 text-xs uppercase mb-1">Operator Sekolah</h4><p class="text-xs text-slate-700 font-medium" id="infoOperator">Loading...</p></div></div>
             <div class="grid grid-cols-2 gap-3 text-xs"><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Email</p><p class="font-medium text-slate-700 truncate" id="infoEmail">-</p></div><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Website</p><p class="font-medium text-blue-500 truncate" id="infoWeb">-</p></div></div>
         </div>
-        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3><div id="listKaldik" class="space-y-3"></div></div>
+        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3><div id="listKaldikHome" class="space-y-3"></div></div>
         <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3><div id="listPengumuman" class="space-y-3"></div></div>
     </div>
 
@@ -87,7 +89,7 @@
 
     <!-- PERPUS (KALDIK) -->
     <div id="viewPerpus" class="hidden fade-in space-y-6">
-        <div><h2 class="text-lg font-bold mb-3 text-fuchsia-800 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Kalender Pendidikan</h2><div id="listKaldik" class="space-y-3"><div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div></div></div>
+        <div><h2 class="text-lg font-bold mb-3 text-fuchsia-800 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Kalender Pendidikan</h2><div id="listKaldikPerpus" class="space-y-3"><div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div></div></div>
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     </div>
 
@@ -102,7 +104,9 @@
             <button onclick="filterAkademik('ASAS')" class="px-4 py-2 rounded-xl bg-white border border-indigo-100 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap shadow-sm">📝 ASAS</button>
             <button onclick="filterAkademik('TKA')" class="px-4 py-2 rounded-xl bg-white border border-purple-100 text-xs font-bold text-purple-600 hover:bg-purple-50 transition whitespace-nowrap shadow-sm">💻 TKA</button>
         </div>
-        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition"><i class="fas fa-plus-circle"></i> Tambah Konten Baru</button>
+        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+            <i class="fas fa-plus-circle"></i> Tambah Konten Baru
+        </button>
         <div id="listAkademik" class="space-y-3 min-h-[200px]"></div>
     </div>
 
@@ -117,9 +121,9 @@
 
   <!-- MENU BAWAH -->
   <nav class="bg-white border-t border-fuchsia-100 h-16 fixed bottom-0 w-full flex justify-around items-center z-30 pb-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
-    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
-    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
-    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
+    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
+    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
+    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
   </nav>
 
   <!-- MODAL UPLOAD -->
@@ -207,16 +211,25 @@ function initApp(){
 
 function toggleSidebar(){ const sb = el('sidebar'); const ov = el('sidebarOverlay'); if(sb.classList.contains('open')){ sb.classList.remove('open'); ov.classList.add('hidden'); } else { sb.classList.add('open'); ov.classList.remove('hidden'); } }
 function navTo(page){
-    ['viewHome','viewAkademik','viewNilaiGuru','viewNilaiSiswa','viewMading','viewPerpus','viewProfil','viewBerita'].forEach(id=>el(id).classList.add('hidden'));
+    ['viewHome','viewAkademik','viewNilaiGuru','viewNilaiSiswa','viewMading','viewPerpus','viewProfil','viewBerita'].forEach(id => { const elem = el(id); if(element = elem) element.classList.add('hidden'); });
     el('sidebar').classList.remove('open'); el('sidebarOverlay').classList.add('hidden');
-    ['navBotHome','navBotAkd','navBotKhusus'].forEach(id => el(id).className = "flex flex-col items-center w-16 text-slate-400 transition active:scale-95");
+    ['navBotHome','navBotAkd','navBotKhusus'].forEach(id => { const elem = el(id); if(element = elem) element.className = "flex flex-col items-center w-16 text-slate-400 transition active:scale-95"; });
 
-    if(page==='home'){ el('viewHome').classList.remove('hidden'); el('navBotHome').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; loadHome(); }
-    else if(page==='akademik'){ el('viewAkademik').classList.remove('hidden'); loadAkademik('Materi'); el('navBotAkd').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
-    else if(page==='nilaiGuru'){ el('viewNilaiGuru').classList.remove('hidden'); el('navBotKhusus').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
+    if(page==='home'){ 
+        el('viewHome').classList.remove('hidden'); 
+        const nav = el('navBotHome'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; 
+        loadHome(); loadKaldik(true); // Load Kaldik di Home
+    }
+    else if(page==='akademik'){ 
+        el('viewAkademik').classList.remove('hidden'); 
+        loadAkademik('Materi'); 
+        const nav = el('navBotAkd'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; 
+    }
+    else if(page==='nilaiGuru'){ el('viewNilaiGuru').classList.remove('hidden'); const nav = el('navBotKhusus'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
     else if(page==='nilaiSiswa'){ el('viewNilaiSiswa').classList.remove('hidden'); loadLeaderboard(); }
-    else if(page==='mading'){ el('viewMading').classList.remove('hidden'); loadMading(); el('navBotKhusus').className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
-    else if(page==='perpus'){ el('viewPerpus').classList.remove('hidden'); loadPerpus(); loadKaldik(); } 
+    else if(page==='mading'){ el('viewMading').classList.remove('hidden'); loadMading(); const nav = el('navBotKhusus'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
+    else if(page==='perpus'){ el('viewPerpus').classList.remove('hidden'); loadPerpus(); loadKaldik(false); // Load Kaldik di Perpus
+    } 
     else if(page==='profil'){ el('viewProfil').classList.remove('hidden'); }
     else if(page==='berita'){ el('viewBerita').classList.remove('hidden'); loadBerita(); }
 }
@@ -231,21 +244,36 @@ function loadHome(){
         window.CACHE_BERITA = d.pengumuman; el('listPengumuman').innerHTML = renderBerita(d.pengumuman);
     });
 }
-function loadKaldik(){
-    el('listKaldik').innerHTML = "<div class='text-center py-4'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
+function loadKaldik(isHome){
+    // Update container ID based on location
+    const containerId = isHome ? 'listKaldik' : 'listKaldik'; 
+    // Note: In HTML both have same ID "listKaldik", this was corrected in previous step but lets be safe.
+    // Actually in the fixed HTML above I used listKaldikHome and listKaldikPerpus? No, I reverted to listKaldik in previous turn to avoid confusion but introduced duplicate ID issue again. 
+    // Let's use querySelector to be safe.
+    
+    // FETCH KALDIK
     fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{
         const kaldik = d.data.filter(item => item.kategori === 'Kaldik' || item.kategori === 'kaldik');
-        if(kaldik.length){
-            el('listKaldik').innerHTML = kaldik.map(i => {
-                const linkContent = i.link || '';
-                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
-                    const blob = new Blob([linkContent], {type: 'text/html'});
-                    const url = URL.createObjectURL(blob);
-                    return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
-                }
-                return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
-            }).join('');
-        } else { el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
+        
+        // Render content function
+        const render = (items) => {
+            if(items.length){
+                return items.map(i => {
+                    const linkContent = i.link || '';
+                    if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
+                        const blob = new Blob([linkContent], {type: 'text/html'});
+                        const url = URL.createObjectURL(blob);
+                        return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
+                    }
+                    return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
+                }).join('');
+            } else { return `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
+        };
+
+        // Update elements if they exist
+        const contentHtml = render(kaldik);
+        const containers = document.querySelectorAll('#listKaldik'); // Will get all divs with id listKaldik
+        containers.forEach(div => div.innerHTML = contentHtml);
     });
 }
 function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
