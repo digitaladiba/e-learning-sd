@@ -13,26 +13,17 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Sidebar Animasi */
+    .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
+    .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
-    
     .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
     /* Container untuk Game/HTML */
-    .game-viewer { 
-        width: 100%; 
-        height: 600px; 
-        background: #ffffff; 
-        border: 2px solid #e879f9; 
-        border-radius: 12px; 
-        margin-top: 10px; 
-        overflow: hidden; 
-        position: relative;
-    }
+    .game-viewer { width: 100%; height: 600px; background: #ffffff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
     .game-viewer iframe { width: 100%; height: 100%; border: none; }
     
     /* Embed Container Kecil */
@@ -46,13 +37,12 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR MENU (Tersembunyi di Kiri) -->
+  <!-- 1. SIDEBAR MENU LENGKAP -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
         <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30"><i class="fas fa-times"></i></button>
     </div>
-    
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
         <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
         <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
@@ -74,28 +64,20 @@
         <button onclick="doLogout()" class="w-full py-3 bg-red-100 text-red-600 rounded-xl font-bold text-sm hover:bg-red-200 transition">Keluar Aplikasi</button>
     </div>
   </aside>
-  
-  <!-- Overlay -->
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
   <!-- 2. HEADER -->
   <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
     <div class="flex items-center gap-3">
-        <!-- TOMBOL MENU HAMBURGER DI SINI -->
         <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
             <i class="fas fa-bars text-xl"></i>
         </button>
-        
-        <!-- LOGO -->
         <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')">
-            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
+            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div>
+            <span class="font-bold text-fuchsia-800 tracking-tight text-lg hidden sm:block">SDN 04 TAMAN</span>
+            <span class="font-bold text-fuchsia-800 tracking-tight text-lg sm:hidden">SDN 04</span>
         </div>
     </div>
-    
-    <!-- Profil Kanan Atas -->
     <div class="flex items-center gap-3">
         <div class="text-right hidden sm:block">
             <p id="headName" class="text-xs font-bold text-slate-700">User</p>
@@ -121,7 +103,6 @@
             <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3"><div class="mt-1 text-blue-500"><i class="fas fa-user-tie"></i></div><div><h4 class="font-bold text-blue-700 text-xs uppercase mb-1">Operator Sekolah</h4><p class="text-xs text-slate-700 font-medium" id="infoOperator">Loading...</p></div></div>
             <div class="grid grid-cols-2 gap-3 text-xs"><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Email</p><p class="font-medium text-slate-700 truncate" id="infoEmail">-</p></div><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Website</p><p class="font-medium text-blue-500 truncate" id="infoWeb">-</p></div></div>
         </div>
-        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3><div id="listKaldikHome" class="space-y-3"></div></div>
         <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3><div id="listPengumuman" class="space-y-3"></div></div>
     </div>
 
@@ -156,12 +137,8 @@
     
     <!-- NILAI SISWA -->
     <div id="viewNilaiSiswa" class="hidden fade-in space-y-6"><div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden"><div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div><h3 class="font-bold text-yellow-400 uppercase tracking-widest text-xs mb-4 relative z-10">Papan Juara Kelas</h3><div id="top3Container" class="flex justify-center items-end gap-4 relative z-10"><p class="text-xs opacity-60">Memuat...</p></div></div><div class="space-y-3"><h3 class="font-bold text-fuchsia-800">Riwayat Nilai Saya</h3><div id="riwayatNilai" class="space-y-2"></div></div></div>
-    
-    <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
-    
-    <!-- PROFIL -->
-    <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
+    <div id="viewPerpus" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
   </main>
 
   <!-- 4. MENU BAWAH -->
@@ -200,17 +177,15 @@
   </div>
 
 <script>
-// CONFIG
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
-// AUTH
 const savedUser = localStorage.getItem('lmsUserV4');
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // el('sidebarToggle').classList.remove('hidden'); // Menu sudah ada di header
+    el('sidebarToggle').classList.remove('hidden');
     initApp();
 }
 
@@ -223,24 +198,36 @@ function doLogin(){
             USER = d;
             localStorage.setItem('lmsUserV4', JSON.stringify(d)); 
             el('loginOverlay').classList.add('hidden');
+            el('sidebarToggle').classList.remove('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
 }
 function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV4'); location.reload(); } }
 
-// INIT
 function initApp(){
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
     el('headRole').innerText = USER.role;
     el('profilNama').innerText = USER.nama;
     el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
+    
+    // FIX AVATAR SESUAI GENDER
     let avatarUrl = "";
-    if(USER.foto && USER.foto.startsWith("http")) avatarUrl = USER.foto; 
-    else if(USER.role==='siswa') avatarUrl = `https://api.dicebear.com/7.x/avataaars/svg?seed=${USER.nama}`;
-    else avatarUrl = `https://api.dicebear.com/7.x/bottts/svg?seed=${USER.nama}`;
-    el('headImg').src = avatarUrl; el('profilImg').src = avatarUrl;
+    if(USER.foto && USER.foto.startsWith("http")) {
+        avatarUrl = USER.foto;
+    } else {
+        const seed = USER.nama.replace(/ /g, '');
+        const gender = USER.gender || "L";
+        let options = "";
+        // Gender P = Panjang/Hijab, L = Pendek
+        if (gender === 'P') options = "&top=longHair,hijab,bob,curly,bigHair";
+        else options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat,shortRound";
+        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}${options}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+    }
+
+    el('headImg').src = avatarUrl; 
+    el('profilImg').src = avatarUrl;
 
     if(USER.role === 'guru' || USER.role === 'admin'){
         el('menuGuruSide').classList.remove('hidden');
@@ -301,6 +288,7 @@ function loadKaldik(isHome){
         if(kaldik.length){
             container.innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
+                // Render HTML untuk Kaldik
                 if(linkContent.trim().startsWith('<')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const url = URL.createObjectURL(blob);
@@ -324,6 +312,7 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
+                // FIX: RENDER HTML EMBED (GAME/KUIS) MENGGUNAKAN BLOB URL
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const blobUrl = URL.createObjectURL(blob);
