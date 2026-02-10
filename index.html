@@ -22,11 +22,11 @@
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
+    /* Container Embed & Game */
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
     
-    /* Container untuk Kuis/Game Full HTML */
-    .game-viewer { width: 100%; height: 500px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
+    .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
     .game-viewer iframe { width: 100%; height: 100%; border: none; }
     
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -83,7 +83,6 @@
             <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3"><div class="mt-1 text-blue-500"><i class="fas fa-user-tie"></i></div><div><h4 class="font-bold text-blue-700 text-xs uppercase mb-1">Operator Sekolah</h4><p class="text-xs text-slate-700 font-medium" id="infoOperator">Loading...</p></div></div>
             <div class="grid grid-cols-2 gap-3 text-xs"><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Email</p><p class="font-medium text-slate-700 truncate" id="infoEmail">-</p></div><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Website</p><p class="font-medium text-blue-500 truncate" id="infoWeb">-</p></div></div>
         </div>
-        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3><div id="listKaldik" class="space-y-3"></div></div>
         <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3><div id="listPengumuman" class="space-y-3"></div></div>
     </div>
 
@@ -96,7 +95,7 @@
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     </div>
 
-    <!-- AKADEMIK -->
+    <!-- AKADEMIK (GAME/KUIS FIX MUNCUL) -->
     <div id="viewAkademik" class="hidden fade-in space-y-4">
         <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
         <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
@@ -115,14 +114,9 @@
 
     <!-- NILAI GURU -->
     <div id="viewNilaiGuru" class="hidden fade-in space-y-4"><div class="card-sd p-5 border-l-4 border-fuchsia-500 shadow-fuchsia-100"><h3 class="font-bold text-lg mb-4 text-fuchsia-800">Input Nilai Siswa</h3><div class="space-y-3"><div class="flex gap-2"><input id="inKelas" type="number" placeholder="Kelas" class="w-20 p-2 border border-fuchsia-200 rounded-lg text-center font-bold text-fuchsia-700 outline-none"><button onclick="loadSiswaDropdown()" class="flex-1 bg-fuchsia-600 text-white rounded-lg font-bold text-xs hover:bg-fuchsia-700 transition">Cari Siswa</button></div><select id="inSiswa" class="w-full p-2 border border-fuchsia-200 rounded-lg bg-fuchsia-50 font-bold text-fuchsia-800"><option>Pilih Siswa...</option></select><div class="grid grid-cols-2 gap-2"><select id="inKategori" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><option value="Sumatif">Sumatif</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option></select><input id="inMapel" type="text" placeholder="Mapel" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"></div><input id="inJudul" type="text" placeholder="Judul Penilaian" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><input id="inNilai" type="number" placeholder="Nilai (0-100)" class="w-full p-2 border border-fuchsia-200 rounded-lg font-bold text-lg text-fuchsia-600"><input id="inCatatan" type="text" placeholder="Saran / Catatan" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><button onclick="submitNilai()" id="btnSimpanNilai" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">SIMPAN NILAI</button></div></div></div>
-    
-    <!-- NILAI SISWA -->
     <div id="viewNilaiSiswa" class="hidden fade-in space-y-6"><div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden"><div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div><h3 class="font-bold text-yellow-400 uppercase tracking-widest text-xs mb-4 relative z-10">Papan Juara Kelas</h3><div id="top3Container" class="flex justify-center items-end gap-4 relative z-10"><p class="text-xs opacity-60">Memuat...</p></div></div><div class="space-y-3"><h3 class="font-bold text-fuchsia-800">Riwayat Nilai Saya</h3><div id="riwayatNilai" class="space-y-2"></div></div></div>
-    
-    <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
-    
-    <!-- PROFIL -->
+    <div id="viewPerpus" class="hidden fade-in"><h2 class="text-xl font-bold mb-4 text-blue-800">Perpustakaan Digital</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
     <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
   </main>
 
@@ -141,7 +135,7 @@
             <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
             <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select><select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
             <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
-            <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL (Video/Drive)" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
+            <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML Embed:</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none placeholder-slate-400" placeholder='<iframe src="..."></iframe>'></textarea></div>
             <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Deadline:</p><input id="upDead" type="date" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none text-slate-600"></div>
             <div class="flex gap-2 mt-4"><button onclick="document.getElementById('modalUpload').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-bold text-sm">Batal</button><button onclick="submitAkademik()" id="btnSimpanAkd" class="flex-1 bg-fuchsia-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-fuchsia-700 shadow-md">Simpan</button></div>
@@ -162,10 +156,12 @@
   </div>
 
 <script>
+// CONFIG
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
+// AUTH
 const savedUser = localStorage.getItem('lmsUserV4');
 if(savedUser){
     USER = JSON.parse(savedUser);
@@ -190,6 +186,7 @@ function doLogin(){
 }
 function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV4'); location.reload(); } }
 
+// INIT
 function initApp(){
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
@@ -248,7 +245,12 @@ function loadKaldik(){
             el('listKaldik').innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
                 // Render HTML untuk Kaldik
-                if(linkContent.trim().startsWith('<')) return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container">${linkContent}</div></div>`;
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
+                    // Gunakan Blob untuk keamanan & fungsionalitas
+                    const blob = new Blob([linkContent], {type: 'text/html'});
+                    const url = URL.createObjectURL(blob);
+                    return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
+                }
                 return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
             }).join('');
         } else { el('listKaldik').innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
@@ -257,6 +259,7 @@ function loadKaldik(){
 function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function renderBerita(data){ return data.map(p => `<div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm"><span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">${p.tanggal}</span><h4 class="font-bold text-sm text-slate-800 mt-1">${p.judul}</h4><p class="text-xs text-slate-500 mt-1">${p.isi}</p></div>`).join('') || "<p class='text-center text-xs text-slate-400'>Tidak ada pengumuman.</p>"; }
 
+// AKADEMIK (FIX: HTML GAME/KUIS MUNCUL & BISA DIMAINKAN)
 function filterAkademik(tipe){ loadAkademik(tipe); }
 function loadAkademik(tipe){
     el('listAkademik').innerHTML = "<div class='text-center py-10'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
@@ -267,9 +270,13 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
-                // RENDER HTML EMBED (GAME/KUIS)
+                // RENDER HTML EMBED (GAME/KUIS) MENGGUNAKAN BLOB URL (PENTING!)
+                // Blob URL membuat HTML tersebut menjadi halaman mini tersendiri
+                // Sehingga script game/kuis AI bisa berjalan lancar tanpa error
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
-                    const safeHtml = linkContent.replace(/'/g, "&apos;");
+                    const blob = new Blob([linkContent], {type: 'text/html'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    
                     return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
@@ -277,7 +284,7 @@ function loadAkademik(tipe){
                         </div>
                         <h4 class="font-bold text-slate-800 text-sm mb-2">${i.judul}</h4>
                         <div class="game-viewer">
-                            <iframe srcdoc='${safeHtml}' sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+                            <iframe src="${blobUrl}" allowfullscreen></iframe>
                         </div>
                     </div>`;
                 }
@@ -311,7 +318,7 @@ function submitNilai(){ const p = { action: 'simpan_nilai', email: el('inSiswa')
 function loadLeaderboard(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top3 = d.data; if(top3.length){ el('top3Container').innerHTML = `${top3[1] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-2"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[1].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[1].rata}</p></div>` : ''}<div class="text-center w-1/3 mb-6"><i class="fas fa-medal text-5xl medal-1 animate-bounce"></i><p class="text-xs font-bold text-yellow-300 mt-1 truncate">${top3[0].nama}</p><span class="text-xs font-bold bg-white text-slate-900 px-2 rounded-full shadow-lg">${top3[0].rata}</span></div>${top3[2] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-3"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[2].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[2].rata}</p></div>` : ''}`; } else { el('top3Container').innerHTML = "<p class='text-xs opacity-50 text-white'>Belum ada data</p>"; } }); fetch(`${API_URL}?action=nilai&email=${USER.email}`).then(r=>r.json()).then(d=>{ el('riwayatNilai').innerHTML = d.data.map(n => `<div class="bg-white p-3 rounded-xl border border-fuchsia-50 flex justify-between items-center shadow-sm"><div><span class="text-[9px] font-bold bg-fuchsia-50 text-fuchsia-600 px-2 py-0.5 rounded uppercase">${n.kategori} • ${n.mapel}</span><h4 class="font-bold text-sm mt-1 text-slate-700">${n.judul}</h4></div><div class="text-lg font-bold ${n.nilai>=75?'text-green-600':'text-red-500'}">${n.nilai}</div></div>`).join(''); }); }
 function loadMading(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top = d.data[0]; el('madingJuara').innerText = top ? `🏆 ${top.nama} (Rata-rata: ${top.rata})` : "Belum ada juara."; }); el('madingInfo').innerHTML = renderBerita(window.CACHE_BERITA || []); }
 function loadPerpus(){ el('listPerpus').innerHTML = "Memuat..."; fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{ 
-    const books = d.data.filter(item => item.kategori !== 'Kaldik');
+    const books = d.data.filter(item => item.kategori !== 'Kaldik' && item.kategori !== 'kaldik');
     el('listPerpus').innerHTML = books.map(b => `<a href="${b.link}" target="_blank" class="block bg-white p-4 rounded-xl border border-fuchsia-100 text-center hover:shadow-md transition"><i class="fas fa-book-reader text-3xl text-fuchsia-400 mb-2"></i><h4 class="font-bold text-xs line-clamp-2 text-slate-700">${b.judul}</h4><span class="text-[10px] text-slate-400 bg-slate-50 px-2 rounded mt-1 inline-block">${b.kategori}</span></a>`).join(''); 
 }); }
 function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV4', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
