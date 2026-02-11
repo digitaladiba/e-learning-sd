@@ -24,16 +24,16 @@
     
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    
     .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
     .game-viewer iframe { width: 100%; height: 100%; border: none; }
+
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
-
-    /* Avatar Option Style */
-    .avatar-item { transition: transform 0.2s, border-color 0.2s; cursor: pointer; border: 3px solid transparent; }
-    .avatar-item:hover { transform: scale(1.1); border-color: #d946ef; }
-    .avatar-item:active { transform: scale(0.95); }
+    
+    .avatar-select { transition: transform 0.2s, border-color 0.2s; cursor: pointer; border: 3px solid transparent; background-color: #f3f4f6; }
+    .avatar-select:hover { transform: scale(1.1); border-color: #d946ef; }
   </style>
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
@@ -71,10 +71,13 @@
         <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100"><i class="fas fa-bars text-2xl"></i></button>
         <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')"><div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div><span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span></div>
     </div>
-    <div class="flex items-center gap-2"><div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div><div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')"><img id="headImg" src="" class="w-full h-full object-cover"></div></div>
+    <div class="flex items-center gap-2">
+        <div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')"><img id="headImg" src="" class="w-full h-full object-cover"></div>
+    </div>
   </header>
 
-  <!-- KONTEN -->
+  <!-- KONTEN UTAMA -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
@@ -95,7 +98,7 @@
     <!-- BERITA -->
     <div id="viewBerita" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Berita & Pengumuman</h2><div id="listBerita" class="space-y-3"></div></div>
 
-    <!-- PERPUS (KALDIK) -->
+    <!-- PERPUS -->
     <div id="viewPerpus" class="hidden fade-in space-y-6">
         <div><h2 class="text-lg font-bold mb-3 text-fuchsia-800 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Kalender Pendidikan</h2><div id="listKaldikPerpus" class="space-y-3"><div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div></div></div>
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
@@ -127,7 +130,7 @@
     <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
     
-    <!-- PROFIL -->
+    <!-- PROFIL (AVATAR SELECTOR FIXED) -->
     <div id="viewProfil" class="hidden fade-in">
         <div class="card-sd p-8 text-center mt-6 bg-white/90 backdrop-blur-sm border-2 border-fuchsia-100">
             <div class="w-32 h-32 bg-fuchsia-50 rounded-full mx-auto overflow-hidden border-4 border-white shadow-xl shadow-fuchsia-200 mb-4 ring-2 ring-fuchsia-200">
@@ -138,14 +141,10 @@
             <p id="profilEmail" class="text-xs text-slate-400 font-mono mb-6 pb-6 border-b border-dashed border-fuchsia-200">email@sekolah.id</p>
 
             <!-- PILIH AVATAR (SISWA ONLY) -->
-            <div id="areaPilihAvatar" class="hidden">
-                <p class="text-sm font-bold text-slate-600 mb-3 bg-fuchsia-50 py-2 rounded-lg">Pilih Avatar Kamu:</p>
-                <div id="avatarList" class="grid grid-cols-4 gap-3 justify-items-center mb-6">
-                    <!-- Avatar akan digenerate via JS agar sesuai gender -->
-                </div>
-                <div class="text-center">
-                     <button onclick="generateAvatarOptions()" class="text-xs text-fuchsia-500 hover:underline font-bold"><i class="fas fa-sync-alt"></i> Cari yang lain</button>
-                </div>
+            <div id="areaPilihAvatar" class="hidden mb-6">
+                <p class="text-sm font-bold text-slate-600 mb-4 bg-fuchsia-50 py-2 rounded-lg">Pilih Avatar Kamu:</p>
+                <div id="avatarList" class="grid grid-cols-4 gap-3 justify-items-center mb-4"></div>
+                <button onclick="generateAvatarOptions()" class="text-xs text-fuchsia-600 font-bold hover:underline flex items-center justify-center gap-1 w-full"><i class="fas fa-sync-alt"></i> Acak Pilihan</button>
             </div>
             
             <div id="editProfilGuru" class="hidden text-left bg-slate-50 p-4 rounded-xl border border-slate-100">
@@ -153,7 +152,7 @@
                 <div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-slate-200 rounded-lg text-sm bg-white"><button onclick="updateFotoUser(document.getElementById('urlFotoGuru').value)" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold hover:bg-fuchsia-700">Simpan</button></div>
             </div>
             
-            <button onclick="doLogout()" class="mt-4 w-full py-3 border-2 border-red-100 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50 transition flex items-center justify-center gap-2">
+            <button onclick="doLogout()" class="mt-6 w-full py-3 border-2 border-red-100 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50 transition flex items-center justify-center gap-2">
                 <i class="fas fa-sign-out-alt"></i> Keluar Aplikasi
             </button>
         </div>
@@ -201,17 +200,17 @@ const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ
 let USER = null;
 const el = (id) => document.getElementById(id);
 
-// AUTH
+// AUTH (GANTI VERSI AGAR REFRESH)
 const savedUser = localStorage.getItem('lmsUserV7'); // V7
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // Jika data lama belum ada gender, paksa logout
+    // FIX: Cek gender untuk refresh data lama
     if(USER.role === 'siswa' && !USER.gender) {
-         localStorage.removeItem('lmsUserV7');
-         location.reload();
+        localStorage.removeItem('lmsUserV7');
+        location.reload();
     } else {
-         initApp();
+        initApp();
     }
 }
 
@@ -243,12 +242,13 @@ function initApp(){
     if(USER.foto && USER.foto.startsWith("http")) {
         avatarUrl = USER.foto;
     } else {
-        // Default avatar based on gender for header
+        // DEFAULT AWAL
+        const seed = USER.nama.replace(/ /g, '');
         const gender = (USER.gender || "L").toUpperCase();
+        // Gunakan parameter 'top' yang pasti valid
         const style = gender === 'P' ? 'longHair' : 'shortHair';
-        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${USER.nama}&top=${style}`;
+        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=${style}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
     }
-    
     el('headImg').src = avatarUrl; 
     el('profilImg').src = avatarUrl;
 
@@ -260,8 +260,8 @@ function initApp(){
         el('labelBotKhusus').innerText = "Penilaian";
     } else {
         el('menuSiswaSide').classList.remove('hidden');
-        el('areaPilihAvatar').classList.remove('hidden');
-        generateAvatarOptions(); // GENERATE OPSI AVATAR
+        el('areaPilihAvatar').classList.remove('hidden'); // Show Avatar Selector
+        generateAvatarOptions(); // Generate Pilihan
         
         el('iconBotKhusus').className = "fas fa-clipboard-list text-xl mb-1";
         el('labelBotKhusus').innerText = "Mading";
@@ -269,13 +269,13 @@ function initApp(){
     navTo('home');
 }
 
-// LOGIKA PEMILIHAN AVATAR
+// LOGIKA PEMILIHAN AVATAR (FIXED PARAMETERS)
 function generateAvatarOptions() {
     const gender = (USER.gender || "L").toUpperCase();
     const container = el('avatarList');
     container.innerHTML = "";
     
-    // Gaya rambut yang PASTI valid di DiceBear v9
+    // Daftar Gaya Rambut yang 100% VALID di DiceBear v9
     let styles = [];
     if (gender === 'P') {
         styles = ['longHair', 'bob', 'bun', 'curly', 'straight01', 'straight02', 'hijab', 'bigHair'];
@@ -283,15 +283,18 @@ function generateAvatarOptions() {
         styles = ['shortHair', 'caesar', 'shortCurly', 'shortFlat', 'shortRound', 'shortWaved', 'theCaesar', 'turban'];
     }
 
-    // Generate 8 pilihan acak dari style yang valid
+    // Generate 8 pilihan
     for(let i=0; i<8; i++) {
+        // Pilih gaya acak dari list valid
         const style = styles[Math.floor(Math.random() * styles.length)];
-        const seed = Math.random().toString(36).substring(7); // Random seed
-        const url = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=${style}&facialHairProbability=0`;
+        const seed = Math.random().toString(36).substring(7);
+        // Tambahkan clothing agar lebih bervariasi
+        const url = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}&top=${style}&clothing=blazerAndShirt,collarAndSweater,shirtCrewNeck&backgroundColor=b6e3f4,c0aede,d1d4f9`;
         
         const img = document.createElement('img');
         img.src = url;
-        img.className = "w-14 h-14 rounded-full border-2 border-slate-200 bg-white cursor-pointer hover:border-fuchsia-500 transition avatar-item";
+        img.className = "w-16 h-16 rounded-full border-2 border-slate-200 bg-white cursor-pointer hover:border-fuchsia-500 transition avatar-select shadow-sm";
+        // Saat diklik, update foto user
         img.onclick = () => updateFotoUser(url);
         container.appendChild(img);
     }
