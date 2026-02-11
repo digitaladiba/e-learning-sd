@@ -13,31 +13,21 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Sidebar Animasi */
+    .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
+    .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
-    
     .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Container untuk Game/HTML Fullscreen */
-    .game-viewer { 
-        width: 100%; 
-        height: 600px; /* Tinggi optimal untuk game */
-        background: #ffffff; 
-        border: 2px solid #e879f9; 
-        border-radius: 12px; 
-        margin-top: 10px; 
-        overflow: hidden; 
-        position: relative;
-    }
-    .game-viewer iframe { width: 100%; height: 100%; border: none; }
-    
-    /* Embed Container Kecil */
+    /* Embed Container */
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+    
+    .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
+    .game-viewer iframe { width: 100%; height: 100%; border: none; }
 
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -46,18 +36,16 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR MENU LENGKAP -->
+  <!-- SIDEBAR -->
+  <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()"><i class="fas fa-bars text-xl"></i></div>
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
         <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30"><i class="fas fa-times"></i></button>
     </div>
-    
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
         <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
         <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
-        
-        <!-- Menu Dinamis -->
         <div id="menuGuruSide" class="hidden">
             <button onclick="navTo('nilaiGuru')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-star w-6 text-center text-orange-500"></i> Input Nilai</button>
         </div>
@@ -65,7 +53,6 @@
             <button onclick="navTo('nilaiSiswa')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-trophy w-6 text-center text-yellow-500"></i> Nilai & Medali</button>
             <button onclick="navTo('mading')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-clipboard-list w-6 text-center text-purple-500"></i> Mading Kelas</button>
         </div>
-        
         <button onclick="navTo('perpus')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-book-reader w-6 text-center text-teal-500"></i> Perpus Digital</button>
         <button onclick="navTo('berita')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-newspaper w-6 text-center text-blue-500"></i> Berita Sekolah</button>
         <button onclick="navTo('profil')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-user-circle w-6 text-center text-slate-500"></i> Profil Saya</button>
@@ -76,36 +63,20 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- 2. HEADER -->
-  <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
-    <div class="flex items-center gap-3">
-        <!-- TOMBOL HAMBURGER DI POJOK KIRI -->
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
-            <i class="fas fa-bars text-2xl"></i>
-        </button>
-        
-        <!-- LOGO -->
-        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')">
-            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
-        </div>
+  <!-- HEADER -->
+  <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
+    <div class="flex items-center gap-2">
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition md:hidden"><i class="fas fa-bars text-xl"></i></button>
+        <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div>
+        <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
     </div>
-    
-    <!-- Profil Kanan Atas -->
-    <div class="flex items-center gap-3">
-        <div class="text-right hidden sm:block">
-            <p id="headName" class="text-xs font-bold text-slate-700">User</p>
-            <p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p>
-        </div>
-        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')">
-            <img id="headImg" src="" class="w-full h-full object-cover">
-        </div>
+    <div class="flex items-center gap-2">
+        <div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200"><img id="headImg" src="" class="w-full h-full object-cover"></div>
     </div>
   </header>
 
-  <!-- 3. KONTEN UTAMA -->
+  <!-- KONTEN -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
@@ -194,17 +165,16 @@
   </div>
 
 <script>
-// UPDATE API URL SINI
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
-// AUTH
-const savedUser = localStorage.getItem('lmsUserV4');
+// AUTH (GANTI VERSI AGAR REFRESH)
+const savedUser = localStorage.getItem('lmsUserV5'); // Ganti V4 ke V5
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // el('sidebarToggle').classList.remove('hidden'); // Menu sudah di header
+    // el('sidebarToggle').classList.remove('hidden'); // Dihapus karena menu di header
     initApp();
 }
 
@@ -215,13 +185,13 @@ function doLogin(){
     fetch(`${API_URL}?action=login&email=${email}`).then(r=>r.json()).then(d=>{
         if(d.status){
             USER = d;
-            localStorage.setItem('lmsUserV4', JSON.stringify(d)); 
+            localStorage.setItem('lmsUserV5', JSON.stringify(d)); // V5
             el('loginOverlay').classList.add('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
 }
-function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV4'); location.reload(); } }
+function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV5'); location.reload(); } }
 
 function initApp(){
     el('welcomeName').innerText = USER.nama;
@@ -236,16 +206,13 @@ function initApp(){
         avatarUrl = USER.foto;
     } else {
         const seed = USER.nama.replace(/ /g, '');
-        // Default L jika gender tidak ada
         const gender = (USER.gender || "L").toUpperCase();
         let options = "";
         
         if (gender === 'P') {
-            // Rambut Cewek / Hijab
-            options = "&top=longHair,hijab,bob,curly,bigHair,bun&hairColor=2c1b18,4a312c"; // Cewek
+            options = "&top=longHair,hijab,bob,curly,bigHair,bun&hairColor=2c1b18,4a312c"; // Perempuan
         } else {
-            // Rambut Cowok
-            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat&hairColor=2c1b18,4a312c"; // Cowok
+            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat&hairColor=2c1b18,4a312c"; // Laki-laki
         }
         avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}${options}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
     }
@@ -313,7 +280,6 @@ function loadKaldik(isHome){
         if(kaldik.length){
             container.innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                // Render HTML untuk Kaldik
                 if(linkContent.trim().startsWith('<')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const url = URL.createObjectURL(blob);
@@ -337,7 +303,6 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
-                // FIX: RENDER HTML EMBED (GAME/KUIS) MENGGUNAKAN BLOB URL
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const blobUrl = URL.createObjectURL(blob);
