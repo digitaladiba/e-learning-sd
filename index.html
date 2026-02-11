@@ -13,7 +13,7 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Animasi Sidebar */
+    /* Sidebar Animasi */
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
     
@@ -22,10 +22,10 @@
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Container untuk Game/HTML */
+    /* Container untuk Game/HTML Fullscreen */
     .game-viewer { 
         width: 100%; 
-        height: 600px; 
+        height: 600px; /* Tinggi optimal untuk game */
         background: #ffffff; 
         border: 2px solid #e879f9; 
         border-radius: 12px; 
@@ -79,8 +79,8 @@
   <!-- 2. HEADER -->
   <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
     <div class="flex items-center gap-3">
-        <!-- TOMBOL HAMBURGER -->
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-fuchsia-50 hover:text-fuchsia-600 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
+        <!-- TOMBOL HAMBURGER DI POJOK KIRI -->
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
             <i class="fas fa-bars text-2xl"></i>
         </button>
         
@@ -154,11 +154,7 @@
     
     <!-- NILAI SISWA -->
     <div id="viewNilaiSiswa" class="hidden fade-in space-y-6"><div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden"><div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div><h3 class="font-bold text-yellow-400 uppercase tracking-widest text-xs mb-4 relative z-10">Papan Juara Kelas</h3><div id="top3Container" class="flex justify-center items-end gap-4 relative z-10"><p class="text-xs opacity-60">Memuat...</p></div></div><div class="space-y-3"><h3 class="font-bold text-fuchsia-800">Riwayat Nilai Saya</h3><div id="riwayatNilai" class="space-y-2"></div></div></div>
-    
-    <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
-    
-    <!-- PROFIL -->
     <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
   </main>
 
@@ -198,15 +194,17 @@
   </div>
 
 <script>
+// UPDATE API URL SINI
 const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
 let USER = null;
 const el = (id) => document.getElementById(id);
 
+// AUTH
 const savedUser = localStorage.getItem('lmsUserV4');
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // el('sidebarToggle').classList.remove('hidden'); 
+    // el('sidebarToggle').classList.remove('hidden'); // Menu sudah di header
     initApp();
 }
 
@@ -219,7 +217,6 @@ function doLogin(){
             USER = d;
             localStorage.setItem('lmsUserV4', JSON.stringify(d)); 
             el('loginOverlay').classList.add('hidden');
-            el('sidebarToggle').classList.remove('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
@@ -233,22 +230,22 @@ function initApp(){
     el('profilNama').innerText = USER.nama;
     el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
     
-    // LOGIKA AVATAR GENDER FIX
+    // FIX AVATAR GENDER
     let avatarUrl = "";
     if(USER.foto && USER.foto.startsWith("http")) {
         avatarUrl = USER.foto;
     } else {
         const seed = USER.nama.replace(/ /g, '');
-        // Default Laki-laki jika gender kosong
+        // Default L jika gender tidak ada
         const gender = (USER.gender || "L").toUpperCase();
         let options = "";
         
         if (gender === 'P') {
             // Rambut Cewek / Hijab
-            options = "&top=longHair,hijab,bob,curly,bigHair,bun";
+            options = "&top=longHair,hijab,bob,curly,bigHair,bun&hairColor=2c1b18,4a312c"; // Cewek
         } else {
             // Rambut Cowok
-            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat";
+            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat&hairColor=2c1b18,4a312c"; // Cowok
         }
         avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}${options}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
     }
@@ -316,7 +313,8 @@ function loadKaldik(isHome){
         if(kaldik.length){
             container.innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
+                // Render HTML untuk Kaldik
+                if(linkContent.trim().startsWith('<')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const url = URL.createObjectURL(blob);
                     return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
@@ -339,6 +337,7 @@ function loadAkademik(tipe){
                 const linkContent = i.konten || i.link || '';
                 const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
 
+                // FIX: RENDER HTML EMBED (GAME/KUIS) MENGGUNAKAN BLOB URL
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const blobUrl = URL.createObjectURL(blob);
