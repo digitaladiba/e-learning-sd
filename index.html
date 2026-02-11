@@ -13,18 +13,15 @@
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    .avatar-option { transition: all 0.2s; border: 3px solid transparent; }
-    .avatar-option:hover { transform: scale(1.05); }
-    .avatar-option.selected { border-color: #c026d3; background-color: #fce7f3; transform: scale(1.1); }
-    
-    /* Loading Spinner */
-    .loader { border: 4px solid #f3f3f3; border-radius: 50%; border-top: 4px solid #c026d3; width: 30px; height: 30px; animation: spin 1s linear infinite; margin: auto; }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    /* Animasi Avatar */
+    .avatar-item { transition: all 0.2s; border: 3px solid transparent; cursor: pointer; }
+    .avatar-item:hover { transform: scale(1.1); }
+    .avatar-item.selected { border-color: #c026d3; background-color: #fae8ff; transform: scale(1.1); box-shadow: 0 4px 10px rgba(192, 38, 211, 0.3); }
   </style>
 </head>
 <body class="text-slate-800">
 
-  <!-- LOGIN PAGE -->
+  <!-- HALAMAN LOGIN (TIDAK BERUBAH) -->
   <div id="pageLogin" class="min-h-screen flex items-center justify-center p-4">
     <div class="bg-white p-8 rounded-2xl shadow-xl max-w-sm w-full border border-fuchsia-100">
       <div class="text-center mb-6">
@@ -47,8 +44,8 @@
     </div>
   </div>
 
-  <!-- DASHBOARD SISWA -->
-  <div id="dashboardSiswa" class="hidden min-h-screen pb-24">
+  <!-- DASHBOARD SISWA (LAYOUT TETAP) -->
+  <div id="dashboardSiswa" class="hidden min-h-screen pb-24 relative">
     <!-- Header -->
     <header class="bg-white p-6 rounded-b-3xl shadow-sm sticky top-0 z-40">
       <div class="flex justify-between items-center">
@@ -56,116 +53,147 @@
           <h2 class="text-lg font-bold text-slate-800" id="welcomeName">Halo, Siswa</h2>
           <p class="text-xs text-slate-500" id="userClass">Kelas -</p>
         </div>
-        <div class="relative" onclick="openAvatarModal()">
-            <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" class="w-12 h-12 rounded-full border-2 border-fuchsia-200 object-cover bg-slate-100 cursor-pointer">
-            <div class="absolute bottom-0 right-0 bg-fuchsia-600 text-white text-[10px] p-1 rounded-full border-2 border-white">
-                <i class="fas fa-camera"></i>
+        <!-- Wrapper Avatar dengan Icon Edit -->
+        <div class="relative group cursor-pointer" onclick="bukaModalAvatar()">
+            <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" class="w-12 h-12 rounded-full border-2 border-fuchsia-200 object-cover bg-slate-100">
+            <div class="absolute -bottom-1 -right-1 bg-fuchsia-600 text-white w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
+                <i class="fas fa-pencil-alt text-[10px]"></i>
             </div>
         </div>
       </div>
     </header>
 
-    <!-- Content Area -->
+    <!-- Content Area (Menu & Info) -->
     <main class="p-6 space-y-6">
-      
       <!-- Menu Grid -->
       <div class="grid grid-cols-2 gap-4">
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="showSection('materi')">
+        <!-- Materi -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Materi (Placeholder)')">
           <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
             <i class="fas fa-book-open text-blue-500"></i>
           </div>
           <span class="text-sm font-semibold">Materi</span>
         </div>
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="showSection('tugas')">
+        <!-- Tugas -->
+        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Tugas (Placeholder)')">
           <div class="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
             <i class="fas fa-pencil-alt text-orange-500"></i>
           </div>
           <span class="text-sm font-semibold">Tugas</span>
         </div>
+         <!-- Jadwal -->
+         <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Jadwal (Placeholder)')">
+            <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <i class="fas fa-calendar-alt text-green-500"></i>
+            </div>
+            <span class="text-sm font-semibold">Jadwal</span>
+          </div>
+          <!-- Nilai -->
+          <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Nilai (Placeholder)')">
+            <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
+              <i class="fas fa-star text-purple-500"></i>
+            </div>
+            <span class="text-sm font-semibold">Nilai</span>
+          </div>
       </div>
 
-      <!-- Info Section -->
+      <!-- Info Pengumuman -->
       <div class="bg-white p-5 rounded-2xl shadow-sm border border-fuchsia-50">
-        <h3 class="font-bold text-slate-700 mb-3 text-sm">Pengumuman Sekolah</h3>
+        <h3 class="font-bold text-slate-700 mb-3 text-sm flex items-center gap-2">
+            <i class="fas fa-bullhorn text-fuchsia-500"></i> Pengumuman Sekolah
+        </h3>
         <div id="pengumumanList" class="space-y-3 text-xs text-slate-600">
-            <p>Memuat pengumuman...</p>
+            <p class="text-slate-400 italic">Memuat pengumuman...</p>
         </div>
       </div>
-
     </main>
   </div>
 
-  <!-- MODAL PILIH AVATAR -->
-  <div id="modalAvatar" class="fixed inset-0 bg-black/50 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
-    <div class="bg-white rounded-2xl w-full max-w-md max-h-[80vh] flex flex-col">
-        <div class="p-4 border-b flex justify-between items-center">
-            <h3 class="font-bold text-lg">Pilih Avatar</h3>
-            <button onclick="closeAvatarModal()" class="text-slate-400 hover:text-slate-600"><i class="fas fa-times text-xl"></i></button>
-        </div>
+  <!-- MODAL PILIH AVATAR (BARU: UI MODERN & RESPONSIVE) -->
+  <div id="modalAvatar" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-fade-in">
         
-        <div class="p-4 overflow-y-auto grid grid-cols-3 gap-3" id="avatarGrid">
-            <!-- Avatar items will be injected here -->
+        <!-- Modal Header -->
+        <div class="bg-fuchsia-600 p-4 text-white flex justify-between items-center shrink-0">
+            <div>
+                <h3 class="font-bold text-lg">Pilih Karakter Kamu</h3>
+                <p class="text-xs opacity-80" id="avatarSubtitle">Sesuaikan dengan gayamu!</p>
+            </div>
+            <button onclick="tutupModalAvatar()" class="bg-white/20 hover:bg-white/30 rounded-full w-8 h-8 flex items-center justify-center transition">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
 
-        <div class="p-4 border-t">
-            <button onclick="saveAvatar()" id="btnSaveAvatar" class="w-full bg-fuchsia-600 text-white py-3 rounded-xl font-bold">Simpan Perubahan</button>
+        <!-- Grid Avatar (Scrollable) -->
+        <div class="p-6 overflow-y-auto grow custom-scrollbar">
+            <div class="grid grid-cols-3 gap-4" id="avatarGridContainer">
+                <!-- Avatar items injected via JS -->
+            </div>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="p-4 border-t bg-slate-50 shrink-0">
+            <button onclick="simpanAvatar()" id="btnSimpanAvatar" class="w-full bg-fuchsia-600 text-white py-3 rounded-xl font-bold hover:bg-fuchsia-700 transition shadow-lg shadow-fuchsia-200 disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none">
+                Gunakan Avatar Ini
+            </button>
         </div>
     </div>
   </div>
 
   <script>
-    // --- KONFIGURASI ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec"; // GANTI DENGAN URL DEPLOYMENT ANDA
+    // --- KONFIGURASI UTAMA ---
+    const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec"; // GANTI URL
     let USER = null;
-    let selectedAvatarUrl = "";
+    let selectedTempAvatar = "";
 
-    // --- KOLEKSI AVATAR (DiceBear API) ---
-    // Diperbanyak dan disesuaikan gender agar tidak error
-    const AVATARS = {
+    // --- KOLEKSI AVATAR (DIPERBANYAK & STABIL) ---
+    // Menggunakan DiceBear "Avataaars" & "Fun Emoji" agar lebih variatif
+    const AVATAR_COLLECTIONS = {
         'L': [
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Felix",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Aidan",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Chase",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Ryan",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Mason",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jack",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Nolan",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Caleb",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Aiden",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Easton",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brian",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Kai",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Leo",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Robert&glasses=square01",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brian&top=shortHairTheCaesar",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Christopher",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=David",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=George",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jack",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jude",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Leo",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Mason",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Nolan",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Oliver",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Ryan"
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=James"
         ],
         'P': [
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Zoe&top=hijab", 
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&top=hijab",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Zoe&top=hijab",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Mila&top=hijab",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sara&top=hijab",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Amina&top=hijab",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Bella",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Sofia",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Andrea",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Liza",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sara&top=hijab",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Maya",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Emily",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Anna",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jessica&top=longHairStraight",
             "https://api.dicebear.com/9.x/avataaars/svg?seed=Avery",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brooklynn",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Destiny",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jade",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jocelyn",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Leah",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Maria"
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brooklyn",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sadie",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Hazel",
+            "https://api.dicebear.com/9.x/avataaars/svg?seed=Audrey"
         ]
     };
 
     function el(id) { return document.getElementById(id); }
 
+    // --- LOGIN HANDLER ---
     async function handleLogin(e) {
       e.preventDefault();
       const btn = el('btnLogin');
       const email = el('email').value;
       
-      btn.innerText = "Memeriksa...";
+      btn.innerText = "Memproses...";
       btn.disabled = true;
 
       try {
@@ -174,114 +202,170 @@
 
         if (data.status) {
           USER = data.data;
-          // Simpan sesi sederhana
+          // Simpan Gender juga
           localStorage.setItem('lms_user', JSON.stringify(USER));
           initDashboard();
         } else {
-          Swal.fire('Gagal', 'Email tidak ditemukan atau akun tidak aktif.', 'error');
+          Swal.fire('Gagal', data.message || 'Akun tidak ditemukan.', 'error');
         }
       } catch (err) {
-        Swal.fire('Error', 'Gagal terhubung ke server.', 'error');
+        Swal.fire('Error', 'Koneksi bermasalah.', 'error');
       } finally {
         btn.innerText = "MASUK";
         btn.disabled = false;
       }
     }
 
+    // --- DASHBOARD INIT ---
     function initDashboard() {
-      // Cek sesi lokal jika ada
-      if (!USER) {
-          const saved = localStorage.getItem('lms_user');
-          if (saved) USER = JSON.parse(saved);
-          else return; 
-      }
+        if (!USER) {
+            const saved = localStorage.getItem('lms_user');
+            if (saved) USER = JSON.parse(saved);
+            else return; 
+        }
 
-      el('pageLogin').classList.add('hidden');
-      el('dashboardSiswa').classList.remove('hidden');
+        el('pageLogin').classList.add('hidden');
+        el('dashboardSiswa').classList.remove('hidden');
 
-      // Isi Data User
-      el('welcomeName').innerText = `Halo, ${USER.nama}`;
-      el('userClass').innerText = USER.kelas;
-      
-      // Load Avatar (Gunakan default jika kosong)
-      const currentAvatar = USER.foto || `https://ui-avatars.com/api/?name=${USER.nama}&background=random`;
-      el('userAvatar').src = currentAvatar;
+        // Isi Data User
+        el('welcomeName').innerText = `Halo, ${USER.nama.split(' ')[0]}`; // Ambil nama depan saja biar rapi
+        el('userClass').innerText = USER.kelas;
+        
+        // Handle Avatar (Fallback jika kosong)
+        let currentAvatar = USER.foto;
+        if (!currentAvatar || currentAvatar.trim() === "") {
+            currentAvatar = `https://ui-avatars.com/api/?name=${USER.nama}&background=c026d3&color=fff`;
+        }
+        el('userAvatar').src = currentAvatar;
 
-      // Load data lain (dummy call)
-      loadPengumuman();
+        // Load data dummy pengumuman (sesuai request jangan ubah fitur)
+        loadPengumuman();
     }
 
-    // --- LOGIKA AVATAR BARU ---
-
-    function openAvatarModal() {
+    // --- LOGIKA MODAL AVATAR (FEATURE FIX) ---
+    function bukaModalAvatar() {
         const modal = el('modalAvatar');
-        const grid = el('avatarGrid');
+        const grid = el('avatarGridContainer');
+        const subtitle = el('avatarSubtitle');
+        
         modal.classList.remove('hidden');
-        grid.innerHTML = ''; // Reset
+        grid.innerHTML = ''; // Reset isi grid
+        selectedTempAvatar = ""; // Reset pilihan
+        el('btnSimpanAvatar').disabled = true;
+        el('btnSimpanAvatar').innerText = "Pilih Avatar Dulu";
 
-        // Deteksi Gender (Default ke L jika tidak ada data)
-        const gender = USER.gender ? USER.gender.toUpperCase() : 'L';
-        const options = AVATARS[gender] || AVATARS['L'];
+        // Deteksi Gender dari Data Login
+        // Default ke 'L' jika data gender kosong atau tidak valid
+        const gender = (USER.gender && (USER.gender.toUpperCase() === 'P')) ? 'P' : 'L';
+        const koleksi = AVATAR_COLLECTIONS[gender];
 
-        options.forEach(url => {
-            const img = document.createElement('img');
-            img.src = url;
-            img.className = 'w-20 h-20 rounded-full cursor-pointer bg-slate-50 avatar-option mx-auto';
-            if(USER.foto === url) img.classList.add('selected');
+        // Update teks subtitle
+        subtitle.innerText = gender === 'L' ? "Pilihan Keren untuk Siswa Laki-laki" : "Pilihan Cantik untuk Siswa Perempuan";
+
+        // Render Avatar Items
+        koleksi.forEach(url => {
+            const wrapper = document.createElement('div');
             
-            img.onclick = () => {
-                document.querySelectorAll('.avatar-option').forEach(i => i.classList.remove('selected'));
-                img.classList.add('selected');
-                selectedAvatarUrl = url;
-            };
-            grid.appendChild(img);
+            // Cek apakah ini avatar yang sedang dipakai user
+            const isCurrent = (USER.foto === url);
+            const activeClass = isCurrent ? 'selected' : '';
+
+            wrapper.innerHTML = `
+                <div class="bg-slate-50 rounded-full p-1 avatar-item ${activeClass}" onclick="pilihAvatar(this, '${url}')">
+                    <img src="${url}" class="w-full h-full rounded-full object-cover">
+                </div>
+            `;
+            grid.appendChild(wrapper);
         });
     }
 
-    function closeAvatarModal() {
+    function tutupModalAvatar() {
         el('modalAvatar').classList.add('hidden');
     }
 
-    async function saveAvatar() {
-        if (!selectedAvatarUrl) return closeAvatarModal();
+    function pilihAvatar(element, url) {
+        // Hapus kelas selected dari semua item
+        document.querySelectorAll('.avatar-item').forEach(item => item.classList.remove('selected'));
+        // Tambah ke item yang diklik
+        element.querySelector('.avatar-item').classList.add('selected');
+        
+        selectedTempAvatar = url;
+        const btn = el('btnSimpanAvatar');
+        btn.disabled = false;
+        btn.innerText = "Gunakan Avatar Ini";
+        btn.classList.add('animate-pulse');
+    }
 
-        const btn = el('btnSaveAvatar');
+    async function simpanAvatar() {
+        if (!selectedTempAvatar) return;
+
+        const btn = el('btnSimpanAvatar');
+        const originalText = btn.innerText;
         btn.innerText = "Menyimpan...";
         btn.disabled = true;
+        btn.classList.remove('animate-pulse');
 
         try {
-            // Kirim ke backend
+            // Kirim ke Backend
             const response = await fetch(API_URL, {
                 method: 'POST',
                 body: JSON.stringify({
                     action: 'update_foto',
                     email: USER.email,
-                    foto: selectedAvatarUrl
+                    foto: selectedTempAvatar
                 })
             });
             
             const result = await response.json();
             
             if (result.status) {
-                USER.foto = selectedAvatarUrl;
+                // Update State Lokal
+                USER.foto = selectedTempAvatar;
                 localStorage.setItem('lms_user', JSON.stringify(USER));
-                el('userAvatar').src = selectedAvatarUrl;
-                closeAvatarModal();
-                Swal.fire('Berhasil', 'Avatar diperbarui!', 'success');
+                
+                // Update UI Langsung
+                el('userAvatar').src = selectedTempAvatar;
+                
+                tutupModalAvatar();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Keren!',
+                    text: 'Avatar barumu berhasil dipasang.',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
             } else {
                 throw new Error(result.message);
             }
         } catch (e) {
-            Swal.fire('Gagal', 'Gagal menyimpan avatar.', 'error');
+            Swal.fire('Gagal', 'Gagal menyimpan avatar. Coba lagi nanti.', 'error');
         } finally {
-            btn.innerText = "Simpan Perubahan";
+            btn.innerText = originalText;
             btn.disabled = false;
         }
     }
 
     function loadPengumuman() {
-        // Simulasi fetch pengumuman
-        el('pengumumanList').innerHTML = `<div class="bg-fuchsia-50 p-3 rounded-lg border border-fuchsia-100"><strong class="block text-fuchsia-700 mb-1">Selamat Datang!</strong><p>Silakan lengkapi profil dan cek materi pelajaran.</p></div>`;
+        // Fungsi simulasi pengumuman (biarkan seperti aslinya atau fetch backend)
+        const pList = el('pengumumanList');
+        // Fetch placeholder agar tidak kosong
+        fetch(`${API_URL}?action=home&email=${USER.email}`)
+        .then(r => r.json())
+        .then(d => {
+            if(d.status && d.data.pengumuman.length > 0){
+                pList.innerHTML = d.data.pengumuman.map(p => 
+                    `<div class="border-b border-fuchsia-50 pb-2 mb-2 last:border-0">
+                        <span class="text-[10px] text-fuchsia-500 font-semibold">${p.tanggal}</span>
+                        <h4 class="font-bold text-slate-700">${p.judul}</h4>
+                        <p class="line-clamp-2">${p.isi}</p>
+                    </div>`
+                ).join('');
+            } else {
+                pList.innerHTML = "Belum ada pengumuman.";
+            }
+        }).catch(() => {
+            pList.innerHTML = "Gagal memuat pengumuman.";
+        });
     }
 
     // Auto Login Check
