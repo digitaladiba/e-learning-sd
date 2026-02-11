@@ -22,30 +22,44 @@
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
+    /* Container untuk Game/HTML */
+    .game-viewer { 
+        width: 100%; 
+        height: 600px; 
+        background: #ffffff; 
+        border: 2px solid #e879f9; 
+        border-radius: 12px; 
+        margin-top: 10px; 
+        overflow: hidden; 
+        position: relative;
+    }
+    .game-viewer iframe { width: 100%; height: 100%; border: none; }
+    
+    /* Embed Container Kecil */
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-    .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
-    .game-viewer iframe { width: 100%; height: 100%; border: none; }
+
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     
-    /* Hover Avatar */
-    .avatar-select:hover { transform: scale(1.1); border-color: #d946ef; }
+    /* Avatar Hover */
+    .avatar-select:hover { transform: scale(1.1); border-color: #d946ef; cursor: pointer; }
   </style>
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- SIDEBAR -->
-  <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()"><i class="fas fa-bars text-xl"></i></div>
+  <!-- 1. SIDEBAR MENU LENGKAP -->
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
         <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30"><i class="fas fa-times"></i></button>
     </div>
+    
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
         <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
         <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
+        
         <div id="menuGuruSide" class="hidden">
             <button onclick="navTo('nilaiGuru')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-star w-6 text-center text-orange-500"></i> Input Nilai</button>
         </div>
@@ -53,6 +67,7 @@
             <button onclick="navTo('nilaiSiswa')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-trophy w-6 text-center text-yellow-500"></i> Nilai & Medali</button>
             <button onclick="navTo('mading')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-clipboard-list w-6 text-center text-purple-500"></i> Mading Kelas</button>
         </div>
+        
         <button onclick="navTo('perpus')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-book-reader w-6 text-center text-teal-500"></i> Perpus Digital</button>
         <button onclick="navTo('berita')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-newspaper w-6 text-center text-blue-500"></i> Berita Sekolah</button>
         <button onclick="navTo('profil')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-user-circle w-6 text-center text-slate-500"></i> Profil Saya</button>
@@ -63,22 +78,42 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- HEADER -->
-  <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
-    <div class="flex items-center gap-2">
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100"><i class="fas fa-bars text-2xl"></i></button>
-        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')"><div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div><span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span></div>
+  <!-- 2. HEADER -->
+  <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
+            <i class="fas fa-bars text-2xl"></i>
+        </button>
+        
+        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')">
+            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                <i class="fas fa-shapes"></i>
+            </div>
+            <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
+        </div>
     </div>
-    <div class="flex items-center gap-2"><div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div><div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')"><img id="headImg" src="" class="w-full h-full object-cover"></div></div>
+    
+    <div class="flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+            <p id="headName" class="text-xs font-bold text-slate-700">User</p>
+            <p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')">
+            <img id="headImg" src="" class="w-full h-full object-cover">
+        </div>
+    </div>
   </header>
 
-  <!-- KONTEN -->
+  <!-- 3. KONTEN UTAMA -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
     <div id="viewHome" class="hidden fade-in space-y-5">
         <div class="hero-gradient rounded-3xl p-6 text-white shadow-lg shadow-fuchsia-200 relative overflow-hidden">
-            <div class="relative z-10"><h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2><p class="text-fuchsia-50 text-sm font-medium">Selamat datang di Portal Digital SDN 04 Taman.</p></div>
+            <div class="relative z-10">
+                <h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2>
+                <p class="text-fuchsia-50 text-sm font-medium">Selamat datang di Portal Digital SDN 04 Taman.</p>
+            </div>
             <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
         </div>
         <div class="card-sd p-5 space-y-4 bg-white/80 backdrop-blur-sm border-fuchsia-100">
@@ -125,7 +160,7 @@
     <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
     
-    <!-- PROFIL -->
+    <!-- PROFIL (AVATAR SELECTOR FIXED) -->
     <div id="viewProfil" class="hidden fade-in">
         <div class="card-sd p-8 text-center mt-6 bg-white/90 backdrop-blur-sm border-2 border-fuchsia-100">
             <div class="w-32 h-32 bg-fuchsia-50 rounded-full mx-auto overflow-hidden border-4 border-white shadow-xl shadow-fuchsia-200 mb-4 ring-2 ring-fuchsia-200">
@@ -135,25 +170,28 @@
             <div class="inline-block bg-fuchsia-100 text-fuchsia-600 text-xs font-bold px-3 py-1 rounded-full mt-2 mb-4" id="profilRole">Siswa Kelas -</div>
             <p id="profilEmail" class="text-xs text-slate-400 font-mono mb-6 pb-6 border-b border-dashed border-fuchsia-200">email@sekolah.id</p>
 
-            <!-- PILIH AVATAR (SISWA ONLY) -->
+            <!-- PILIH AVATAR -->
             <div id="areaPilihAvatar" class="hidden">
-                <p class="text-sm font-bold text-slate-600 mb-3">Ganti Avatar:</p>
-                <div class="grid grid-cols-3 gap-3 mb-6">
-                    <!-- Cowok (Rambut Pendek) -->
+                <p class="text-sm font-bold text-slate-600 mb-3 bg-fuchsia-50 py-2 rounded-lg">Pilih Avatar Kamu:</p>
+                
+                <p class="text-xs text-blue-500 font-bold mb-2">Laki-laki</p>
+                <div class="flex justify-center gap-3 mb-4">
                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&top=shortHair')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&top=shortHair" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
-                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortHair')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortHair" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
-                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Jack&top=caesar')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Jack&top=caesar" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
-                    
-                    <!-- Cewek (Rambut Panjang / Hijab) -->
-                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longHair')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longHair" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
-                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
-                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&top=theCaesar')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&top=theCaesar" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
+                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortWaved')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortWaved" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
+                </div>
+
+                <p class="text-xs text-pink-500 font-bold mb-2">Perempuan</p>
+                <div class="flex justify-center gap-3 mb-4">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longButNotTooLong')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longButNotTooLong" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
                 </div>
             </div>
             
             <div id="editProfilGuru" class="hidden text-left bg-slate-50 p-4 rounded-xl border border-slate-100">
                 <p class="text-xs font-bold text-slate-500 mb-2">Ganti Foto Profil (Link URL)</p>
-                <div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-slate-200 rounded-lg text-sm bg-white"><button onclick="updateFotoUser(document.getElementById('urlFotoGuru').value)" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold hover:bg-fuchsia-700">Simpan</button></div>
+                <div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoUser(document.getElementById('urlFotoGuru').value)" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold hover:bg-fuchsia-700">Simpan</button></div>
             </div>
             
             <button onclick="doLogout()" class="mt-4 w-full py-3 border-2 border-red-100 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50 transition flex items-center justify-center gap-2">
@@ -161,6 +199,7 @@
             </button>
         </div>
     </div>
+
   </main>
 
   <!-- MENU BAWAH -->
@@ -209,7 +248,6 @@ const savedUser = localStorage.getItem('lmsUserV7');
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    // el('sidebarToggle').classList.remove('hidden'); // Menu sudah di header
     initApp();
 }
 
@@ -222,14 +260,12 @@ function doLogin(){
             USER = d;
             localStorage.setItem('lmsUserV7', JSON.stringify(d)); 
             el('loginOverlay').classList.add('hidden');
-            el('sidebarToggle').classList.remove('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
 }
 function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV7'); location.reload(); } }
 
-// INIT
 function initApp(){
     el('welcomeName').innerText = USER.nama;
     el('headName').innerText = USER.nama;
@@ -243,8 +279,8 @@ function initApp(){
     if(USER.foto && USER.foto.startsWith("http")) {
         avatarUrl = USER.foto;
     } else {
-        // DEFAULT JIKA BELUM SET AVATAR
-        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${USER.nama}`;
+        // DEFAULT jika belum pilih
+        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${USER.nama}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
     }
     el('headImg').src = avatarUrl; 
     el('profilImg').src = avatarUrl;
@@ -257,20 +293,17 @@ function initApp(){
         el('labelBotKhusus').innerText = "Penilaian";
     } else {
         el('menuSiswaSide').classList.remove('hidden');
-        // Tampilkan Pilihan Avatar untuk Siswa
-        el('areaPilihAvatar').classList.remove('hidden');
-        
+        el('areaPilihAvatar').classList.remove('hidden'); // Tampilkan Pemilih Avatar
         el('iconBotKhusus').className = "fas fa-clipboard-list text-xl mb-1";
         el('labelBotKhusus').innerText = "Mading";
     }
     navTo('home');
 }
 
-// UPDATE FOTO USER (Bisa dari input manual atau klik avatar)
+// UPDATE FOTO USER
 function updateFotoUser(url){
     if(!url) return alert("URL Foto kosong!");
     
-    // Feedback UI
     if(USER.role === 'guru' || USER.role === 'admin') el('btnSaveFoto').innerText = "...";
     
     const payload = { action: 'update_foto', email: USER.email, foto: url };
@@ -288,7 +321,9 @@ function updateFotoUser(url){
 }
 
 function pilihAvatar(url){
-    updateFotoUser(url);
+    if(confirm("Gunakan avatar ini?")) {
+        updateFotoUser(url);
+    }
 }
 
 // NAVIGATION
@@ -408,7 +443,7 @@ function loadPerpus(){ el('listPerpus').innerHTML = "Memuat..."; fetch(`${API_UR
     const books = d.data.filter(item => item.kategori !== 'Kaldik' && item.kategori !== 'kaldik');
     el('listPerpus').innerHTML = books.map(b => `<a href="${b.link}" target="_blank" class="block bg-white p-4 rounded-xl border border-fuchsia-100 text-center hover:shadow-md transition"><i class="fas fa-book-reader text-3xl text-fuchsia-400 mb-2"></i><h4 class="font-bold text-xs line-clamp-2 text-slate-700">${b.judul}</h4><span class="text-[10px] text-slate-400 bg-slate-50 px-2 rounded mt-1 inline-block">${b.kategori}</span></a>`).join(''); 
 }); }
-function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV4', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
+function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV7', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
 </script>
 </body>
 </html>
