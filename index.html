@@ -8,374 +8,442 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   
   <style>
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
-    /* Animasi Avatar */
-    .avatar-item { transition: all 0.2s; border: 3px solid transparent; cursor: pointer; }
-    .avatar-item:hover { transform: scale(1.1); }
-    .avatar-item.selected { border-color: #c026d3; background-color: #fae8ff; transform: scale(1.1); box-shadow: 0 4px 10px rgba(192, 38, 211, 0.3); }
+    
+    .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
+    .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
+    #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
+    #sidebar.open { transform: translateX(0); }
+    .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
+    .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
+    .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    /* Container untuk Game/HTML */
+    .game-viewer { 
+        width: 100%; 
+        height: 600px; 
+        background: #ffffff; 
+        border: 2px solid #e879f9; 
+        border-radius: 12px; 
+        margin-top: 10px; 
+        overflow: hidden; 
+        position: relative;
+    }
+    .game-viewer iframe { width: 100%; height: 100%; border: none; }
+    
+    /* Embed Container Kecil */
+    .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
+    .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+    .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+    .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+    .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
+    
+    /* Avatar Hover */
+    .avatar-select:hover { transform: scale(1.1); border-color: #d946ef; cursor: pointer; }
   </style>
 </head>
-<body class="text-slate-800">
+<body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- HALAMAN LOGIN (TIDAK BERUBAH) -->
-  <div id="pageLogin" class="min-h-screen flex items-center justify-center p-4">
-    <div class="bg-white p-8 rounded-2xl shadow-xl max-w-sm w-full border border-fuchsia-100">
-      <div class="text-center mb-6">
-        <div class="bg-fuchsia-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
-          <i class="fas fa-school text-4xl text-fuchsia-600"></i>
+  <!-- 1. SIDEBAR MENU LENGKAP -->
+  <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
+    <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
+        <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
+        <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30"><i class="fas fa-times"></i></button>
+    </div>
+    
+    <nav class="flex-1 overflow-y-auto p-4 space-y-1">
+        <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
+        <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
+        
+        <div id="menuGuruSide" class="hidden">
+            <button onclick="navTo('nilaiGuru')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-star w-6 text-center text-orange-500"></i> Input Nilai</button>
         </div>
-        <h1 class="text-2xl font-bold text-slate-800">E-Learning</h1>
-        <p class="text-sm text-slate-500">SD Negeri 04 Taman</p>
-      </div>
-      
-      <form id="formLogin" onsubmit="handleLogin(event)">
-        <div class="mb-4">
-          <label class="block text-xs font-bold text-slate-600 mb-1">Email Sekolah</label>
-          <input type="email" id="email" required class="w-full p-3 rounded-xl border border-slate-200 focus:outline-none focus:border-fuchsia-500 bg-slate-50 text-sm" placeholder="nama@sdn04taman.id">
+        <div id="menuSiswaSide" class="hidden">
+            <button onclick="navTo('nilaiSiswa')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-trophy w-6 text-center text-yellow-500"></i> Nilai & Medali</button>
+            <button onclick="navTo('mading')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-clipboard-list w-6 text-center text-purple-500"></i> Mading Kelas</button>
         </div>
-        <button type="submit" id="btnLogin" class="w-full bg-fuchsia-600 text-white py-3 rounded-xl font-bold shadow-lg hover:bg-fuchsia-700 transition transform active:scale-95">
-          MASUK
+        
+        <button onclick="navTo('perpus')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-book-reader w-6 text-center text-teal-500"></i> Perpus Digital</button>
+        <button onclick="navTo('berita')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-newspaper w-6 text-center text-blue-500"></i> Berita Sekolah</button>
+        <button onclick="navTo('profil')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-user-circle w-6 text-center text-slate-500"></i> Profil Saya</button>
+    </nav>
+    <div class="p-4 border-t bg-fuchsia-50/50">
+        <button onclick="doLogout()" class="w-full py-3 bg-red-100 text-red-600 rounded-xl font-bold text-sm hover:bg-red-200 transition">Keluar Aplikasi</button>
+    </div>
+  </aside>
+  <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
+
+  <!-- 2. HEADER -->
+  <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
+    <div class="flex items-center gap-3">
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
+            <i class="fas fa-bars text-2xl"></i>
         </button>
-      </form>
-    </div>
-  </div>
-
-  <!-- DASHBOARD SISWA (LAYOUT TETAP) -->
-  <div id="dashboardSiswa" class="hidden min-h-screen pb-24 relative">
-    <!-- Header -->
-    <header class="bg-white p-6 rounded-b-3xl shadow-sm sticky top-0 z-40">
-      <div class="flex justify-between items-center">
-        <div>
-          <h2 class="text-lg font-bold text-slate-800" id="welcomeName">Halo, Siswa</h2>
-          <p class="text-xs text-slate-500" id="userClass">Kelas -</p>
-        </div>
-        <!-- Wrapper Avatar dengan Icon Edit -->
-        <div class="relative group cursor-pointer" onclick="bukaModalAvatar()">
-            <img id="userAvatar" src="https://ui-avatars.com/api/?name=User" class="w-12 h-12 rounded-full border-2 border-fuchsia-200 object-cover bg-slate-100">
-            <div class="absolute -bottom-1 -right-1 bg-fuchsia-600 text-white w-6 h-6 rounded-full flex items-center justify-center border-2 border-white shadow-sm">
-                <i class="fas fa-pencil-alt text-[10px]"></i>
-            </div>
-        </div>
-      </div>
-    </header>
-
-    <!-- Content Area (Menu & Info) -->
-    <main class="p-6 space-y-6">
-      <!-- Menu Grid -->
-      <div class="grid grid-cols-2 gap-4">
-        <!-- Materi -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Materi (Placeholder)')">
-          <div class="bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
-            <i class="fas fa-book-open text-blue-500"></i>
-          </div>
-          <span class="text-sm font-semibold">Materi</span>
-        </div>
-        <!-- Tugas -->
-        <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Tugas (Placeholder)')">
-          <div class="bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
-            <i class="fas fa-pencil-alt text-orange-500"></i>
-          </div>
-          <span class="text-sm font-semibold">Tugas</span>
-        </div>
-         <!-- Jadwal -->
-         <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Jadwal (Placeholder)')">
-            <div class="bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
-              <i class="fas fa-calendar-alt text-green-500"></i>
-            </div>
-            <span class="text-sm font-semibold">Jadwal</span>
-          </div>
-          <!-- Nilai -->
-          <div class="bg-white p-4 rounded-2xl shadow-sm border border-fuchsia-50 flex flex-col items-center justify-center py-6 active:scale-95 transition" onclick="alert('Fitur Nilai (Placeholder)')">
-            <div class="bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mb-2">
-              <i class="fas fa-star text-purple-500"></i>
-            </div>
-            <span class="text-sm font-semibold">Nilai</span>
-          </div>
-      </div>
-
-      <!-- Info Pengumuman -->
-      <div class="bg-white p-5 rounded-2xl shadow-sm border border-fuchsia-50">
-        <h3 class="font-bold text-slate-700 mb-3 text-sm flex items-center gap-2">
-            <i class="fas fa-bullhorn text-fuchsia-500"></i> Pengumuman Sekolah
-        </h3>
-        <div id="pengumumanList" class="space-y-3 text-xs text-slate-600">
-            <p class="text-slate-400 italic">Memuat pengumuman...</p>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- MODAL PILIH AVATAR (BARU: UI MODERN & RESPONSIVE) -->
-  <div id="modalAvatar" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] animate-fade-in">
         
-        <!-- Modal Header -->
-        <div class="bg-fuchsia-600 p-4 text-white flex justify-between items-center shrink-0">
-            <div>
-                <h3 class="font-bold text-lg">Pilih Karakter Kamu</h3>
-                <p class="text-xs opacity-80" id="avatarSubtitle">Sesuaikan dengan gayamu!</p>
+        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')">
+            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
+                <i class="fas fa-shapes"></i>
             </div>
-            <button onclick="tutupModalAvatar()" class="bg-white/20 hover:bg-white/30 rounded-full w-8 h-8 flex items-center justify-center transition">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-
-        <!-- Grid Avatar (Scrollable) -->
-        <div class="p-6 overflow-y-auto grow custom-scrollbar">
-            <div class="grid grid-cols-3 gap-4" id="avatarGridContainer">
-                <!-- Avatar items injected via JS -->
-            </div>
-        </div>
-
-        <!-- Modal Footer -->
-        <div class="p-4 border-t bg-slate-50 shrink-0">
-            <button onclick="simpanAvatar()" id="btnSimpanAvatar" class="w-full bg-fuchsia-600 text-white py-3 rounded-xl font-bold hover:bg-fuchsia-700 transition shadow-lg shadow-fuchsia-200 disabled:bg-slate-300 disabled:text-slate-500 disabled:shadow-none">
-                Gunakan Avatar Ini
-            </button>
+            <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
         </div>
     </div>
-  </div>
+    
+    <div class="flex items-center gap-3">
+        <div class="text-right hidden sm:block">
+            <p id="headName" class="text-xs font-bold text-slate-700">User</p>
+            <p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p>
+        </div>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')">
+            <img id="headImg" src="" class="w-full h-full object-cover">
+        </div>
+    </div>
+  </header>
 
-  <script>
-    // --- KONFIGURASI UTAMA ---
-    const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec"; // GANTI URL
-    let USER = null;
-    let selectedTempAvatar = "";
+  <!-- 3. KONTEN UTAMA -->
+  <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
+    
+    <!-- HOME -->
+    <div id="viewHome" class="hidden fade-in space-y-5">
+        <div class="hero-gradient rounded-3xl p-6 text-white shadow-lg shadow-fuchsia-200 relative overflow-hidden">
+            <div class="relative z-10">
+                <h2 class="text-2xl font-bold mb-2">Halo, <span id="welcomeName">Siswa</span>! 👋</h2>
+                <p class="text-fuchsia-50 text-sm font-medium">Selamat datang di Portal Digital SDN 04 Taman.</p>
+            </div>
+            <i class="fas fa-rocket absolute -right-6 -bottom-6 text-9xl text-white/10 rotate-12"></i>
+        </div>
+        <div class="card-sd p-5 space-y-4 bg-white/80 backdrop-blur-sm border-fuchsia-100">
+            <div class="flex items-center gap-3 border-b border-fuchsia-50 pb-3"><div class="w-10 h-10 bg-fuchsia-100 rounded-full flex items-center justify-center text-fuchsia-600"><i class="fas fa-school"></i></div><div><h3 class="font-bold text-slate-800" id="infoNama">SDN 04 TAMAN</h3><p class="text-xs text-slate-500" id="infoAlamat">Jl. Pendidikan...</p></div></div>
+            <div class="bg-blue-50 p-4 rounded-xl border border-blue-100 flex items-start gap-3"><div class="mt-1 text-blue-500"><i class="fas fa-user-tie"></i></div><div><h4 class="font-bold text-blue-700 text-xs uppercase mb-1">Operator Sekolah</h4><p class="text-xs text-slate-700 font-medium" id="infoOperator">Loading...</p></div></div>
+            <div class="grid grid-cols-2 gap-3 text-xs"><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Email</p><p class="font-medium text-slate-700 truncate" id="infoEmail">-</p></div><div class="bg-white border border-slate-100 p-3 rounded-lg shadow-sm"><p class="font-bold text-slate-400 mb-1">Website</p><p class="font-medium text-blue-500 truncate" id="infoWeb">-</p></div></div>
+        </div>
+        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-calendar-alt text-fuchsia-600"></i> Kalender Pendidikan</h3><div id="listKaldikHome" class="space-y-3"></div></div>
+        <div><h3 class="font-bold text-slate-700 mb-3 flex items-center gap-2"><i class="fas fa-bullhorn text-blue-600"></i> Info Terbaru</h3><div id="listPengumuman" class="space-y-3"></div></div>
+    </div>
 
-    // --- KOLEKSI AVATAR (DIPERBANYAK & STABIL) ---
-    // Menggunakan DiceBear "Avataaars" & "Fun Emoji" agar lebih variatif
-    const AVATAR_COLLECTIONS = {
-        'L': [
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Felix",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Ryan",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Mason",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jack",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Nolan",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Caleb",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Aiden",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Easton",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Kai",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Leo",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Robert&glasses=square01",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brian&top=shortHairTheCaesar",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Christopher",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=David",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=James"
-        ],
-        'P': [
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Zoe&top=hijab",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Mila&top=hijab",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sara&top=hijab",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Amina&top=hijab",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Bella",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sofia",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Maya",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Emily",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Anna",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Jessica&top=longHairStraight",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Avery",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Brooklyn",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Sadie",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Hazel",
-            "https://api.dicebear.com/9.x/avataaars/svg?seed=Audrey"
-        ]
-    };
+    <!-- BERITA -->
+    <div id="viewBerita" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Berita & Pengumuman</h2><div id="listBerita" class="space-y-3"></div></div>
 
-    function el(id) { return document.getElementById(id); }
+    <!-- PERPUS (KALDIK) -->
+    <div id="viewPerpus" class="hidden fade-in space-y-6">
+        <div><h2 class="text-lg font-bold mb-3 text-fuchsia-800 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Kalender Pendidikan</h2><div id="listKaldikPerpus" class="space-y-3"><div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div></div></div>
+        <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
+    </div>
 
-    // --- LOGIN HANDLER ---
-    async function handleLogin(e) {
-      e.preventDefault();
-      const btn = el('btnLogin');
-      const email = el('email').value;
-      
-      btn.innerText = "Memproses...";
-      btn.disabled = true;
+    <!-- AKADEMIK -->
+    <div id="viewAkademik" class="hidden fade-in space-y-4">
+        <h2 class="text-xl font-bold text-fuchsia-800">Akademik Terpadu</h2>
+        <div class="flex gap-2 overflow-x-auto no-scrollbar pb-2">
+            <button onclick="filterAkademik('Materi')" class="px-4 py-2 rounded-xl bg-white border border-blue-100 text-xs font-bold text-blue-600 hover:bg-blue-50 transition whitespace-nowrap shadow-sm">📘 Materi</button>
+            <button onclick="filterAkademik('Tugas')" class="px-4 py-2 rounded-xl bg-white border border-orange-100 text-xs font-bold text-orange-600 hover:bg-orange-50 transition whitespace-nowrap shadow-sm">📝 Tugas</button>
+            <button onclick="filterAkademik('PR')" class="px-4 py-2 rounded-xl bg-white border border-fuchsia-100 text-xs font-bold text-fuchsia-600 hover:bg-fuchsia-50 transition whitespace-nowrap shadow-sm">🏠 PR</button>
+            <button onclick="filterAkademik('Sumatif')" class="px-4 py-2 rounded-xl bg-white border border-red-100 text-xs font-bold text-red-600 hover:bg-red-50 transition whitespace-nowrap shadow-sm">📊 Sumatif</button>
+            <button onclick="filterAkademik('ASAS')" class="px-4 py-2 rounded-xl bg-white border border-indigo-100 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap shadow-sm">📝 ASAS</button>
+            <button onclick="filterAkademik('TKA')" class="px-4 py-2 rounded-xl bg-white border border-purple-100 text-xs font-bold text-purple-600 hover:bg-purple-50 transition whitespace-nowrap shadow-sm">💻 TKA</button>
+        </div>
+        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition">
+            <i class="fas fa-plus-circle"></i> Tambah Konten Baru
+        </button>
+        <div id="listAkademik" class="space-y-3 min-h-[200px]"></div>
+    </div>
 
-      try {
-        const res = await fetch(`${API_URL}?action=login&email=${email}`);
-        const data = await res.json();
+    <!-- NILAI GURU -->
+    <div id="viewNilaiGuru" class="hidden fade-in space-y-4"><div class="card-sd p-5 border-l-4 border-fuchsia-500 shadow-fuchsia-100"><h3 class="font-bold text-lg mb-4 text-fuchsia-800">Input Nilai Siswa</h3><div class="space-y-3"><div class="flex gap-2"><input id="inKelas" type="number" placeholder="Kelas" class="w-20 p-2 border border-fuchsia-200 rounded-lg text-center font-bold text-fuchsia-700 outline-none"><button onclick="loadSiswaDropdown()" class="flex-1 bg-fuchsia-600 text-white rounded-lg font-bold text-xs hover:bg-fuchsia-700 transition">Cari Siswa</button></div><select id="inSiswa" class="w-full p-2 border border-fuchsia-200 rounded-lg bg-fuchsia-50 font-bold text-fuchsia-800"><option>Pilih Siswa...</option></select><div class="grid grid-cols-2 gap-2"><select id="inKategori" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><option value="Sumatif">Sumatif</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option></select><input id="inMapel" type="text" placeholder="Mapel" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"></div><input id="inJudul" type="text" placeholder="Judul Penilaian" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><input id="inNilai" type="number" placeholder="Nilai (0-100)" class="w-full p-2 border border-fuchsia-200 rounded-lg font-bold text-lg text-fuchsia-600"><input id="inCatatan" type="text" placeholder="Saran / Catatan" class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm"><button onclick="submitNilai()" id="btnSimpanNilai" class="w-full bg-blue-600 text-white p-3 rounded-xl font-bold shadow-lg hover:bg-blue-700 transition">SIMPAN NILAI</button></div></div></div>
+    
+    <!-- NILAI SISWA -->
+    <div id="viewNilaiSiswa" class="hidden fade-in space-y-6"><div id="leaderboardArea" class="bg-slate-800 text-white rounded-2xl p-5 shadow-xl shadow-slate-300 text-center relative overflow-hidden"><div class="absolute top-0 left-0 w-32 h-32 bg-fuchsia-500 rounded-full blur-3xl opacity-20 -ml-10 -mt-10"></div><h3 class="font-bold text-yellow-400 uppercase tracking-widest text-xs mb-4 relative z-10">Papan Juara Kelas</h3><div id="top3Container" class="flex justify-center items-end gap-4 relative z-10"><p class="text-xs opacity-60">Memuat...</p></div></div><div class="space-y-3"><h3 class="font-bold text-fuchsia-800">Riwayat Nilai Saya</h3><div id="riwayatNilai" class="space-y-2"></div></div></div>
+    
+    <!-- MADING -->
+    <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
+    
+    <!-- PROFIL (AVATAR SELECTOR FIXED) -->
+    <div id="viewProfil" class="hidden fade-in">
+        <div class="card-sd p-8 text-center mt-6 bg-white/90 backdrop-blur-sm border-2 border-fuchsia-100">
+            <div class="w-32 h-32 bg-fuchsia-50 rounded-full mx-auto overflow-hidden border-4 border-white shadow-xl shadow-fuchsia-200 mb-4 ring-2 ring-fuchsia-200">
+                <img id="profilImg" src="" class="w-full h-full object-cover">
+            </div>
+            <h2 id="profilNama" class="text-2xl font-bold text-fuchsia-900 tracking-tight">Nama Siswa</h2>
+            <div class="inline-block bg-fuchsia-100 text-fuchsia-600 text-xs font-bold px-3 py-1 rounded-full mt-2 mb-4" id="profilRole">Siswa Kelas -</div>
+            <p id="profilEmail" class="text-xs text-slate-400 font-mono mb-6 pb-6 border-b border-dashed border-fuchsia-200">email@sekolah.id</p>
 
-        if (data.status) {
-          USER = data.data;
-          // Simpan Gender juga
-          localStorage.setItem('lms_user', JSON.stringify(USER));
-          initDashboard();
-        } else {
-          Swal.fire('Gagal', data.message || 'Akun tidak ditemukan.', 'error');
-        }
-      } catch (err) {
-        Swal.fire('Error', 'Koneksi bermasalah.', 'error');
-      } finally {
-        btn.innerText = "MASUK";
-        btn.disabled = false;
-      }
-    }
-
-    // --- DASHBOARD INIT ---
-    function initDashboard() {
-        if (!USER) {
-            const saved = localStorage.getItem('lms_user');
-            if (saved) USER = JSON.parse(saved);
-            else return; 
-        }
-
-        el('pageLogin').classList.add('hidden');
-        el('dashboardSiswa').classList.remove('hidden');
-
-        // Isi Data User
-        el('welcomeName').innerText = `Halo, ${USER.nama.split(' ')[0]}`; // Ambil nama depan saja biar rapi
-        el('userClass').innerText = USER.kelas;
-        
-        // Handle Avatar (Fallback jika kosong)
-        let currentAvatar = USER.foto;
-        if (!currentAvatar || currentAvatar.trim() === "") {
-            currentAvatar = `https://ui-avatars.com/api/?name=${USER.nama}&background=c026d3&color=fff`;
-        }
-        el('userAvatar').src = currentAvatar;
-
-        // Load data dummy pengumuman (sesuai request jangan ubah fitur)
-        loadPengumuman();
-    }
-
-    // --- LOGIKA MODAL AVATAR (FEATURE FIX) ---
-    function bukaModalAvatar() {
-        const modal = el('modalAvatar');
-        const grid = el('avatarGridContainer');
-        const subtitle = el('avatarSubtitle');
-        
-        modal.classList.remove('hidden');
-        grid.innerHTML = ''; // Reset isi grid
-        selectedTempAvatar = ""; // Reset pilihan
-        el('btnSimpanAvatar').disabled = true;
-        el('btnSimpanAvatar').innerText = "Pilih Avatar Dulu";
-
-        // Deteksi Gender dari Data Login
-        // Default ke 'L' jika data gender kosong atau tidak valid
-        const gender = (USER.gender && (USER.gender.toUpperCase() === 'P')) ? 'P' : 'L';
-        const koleksi = AVATAR_COLLECTIONS[gender];
-
-        // Update teks subtitle
-        subtitle.innerText = gender === 'L' ? "Pilihan Keren untuk Siswa Laki-laki" : "Pilihan Cantik untuk Siswa Perempuan";
-
-        // Render Avatar Items
-        koleksi.forEach(url => {
-            const wrapper = document.createElement('div');
-            
-            // Cek apakah ini avatar yang sedang dipakai user
-            const isCurrent = (USER.foto === url);
-            const activeClass = isCurrent ? 'selected' : '';
-
-            wrapper.innerHTML = `
-                <div class="bg-slate-50 rounded-full p-1 avatar-item ${activeClass}" onclick="pilihAvatar(this, '${url}')">
-                    <img src="${url}" class="w-full h-full rounded-full object-cover">
+            <!-- PILIH AVATAR -->
+            <div id="areaPilihAvatar" class="hidden">
+                <p class="text-sm font-bold text-slate-600 mb-3 bg-fuchsia-50 py-2 rounded-lg">Pilih Avatar Kamu:</p>
+                
+                <p class="text-xs text-blue-500 font-bold mb-2">Laki-laki</p>
+                <div class="flex justify-center gap-3 mb-4">
+                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&top=shortHair')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Felix&top=shortHair" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
+                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&top=theCaesar')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Aneka&top=theCaesar" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
+                    <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortWaved')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Bob&top=shortWaved" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-blue-50">
                 </div>
-            `;
-            grid.appendChild(wrapper);
-        });
-    }
 
-    function tutupModalAvatar() {
-        el('modalAvatar').classList.add('hidden');
-    }
+                <p class="text-xs text-pink-500 font-bold mb-2">Perempuan</p>
+                <div class="flex justify-center gap-3 mb-4">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longButNotTooLong')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ana&top=longButNotTooLong" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Siti&top=hijab" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                     <img onclick="pilihAvatar('https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob')" src="https://api.dicebear.com/9.x/avataaars/svg?seed=Lina&top=bob" class="avatar-select w-14 h-14 rounded-full border-2 border-slate-200 bg-pink-50">
+                </div>
+            </div>
+            
+            <div id="editProfilGuru" class="hidden text-left bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <p class="text-xs font-bold text-slate-500 mb-2">Ganti Foto Profil (Link URL)</p>
+                <div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoUser(document.getElementById('urlFotoGuru').value)" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold hover:bg-fuchsia-700">Simpan</button></div>
+            </div>
+            
+            <button onclick="doLogout()" class="mt-4 w-full py-3 border-2 border-red-100 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50 transition flex items-center justify-center gap-2">
+                <i class="fas fa-sign-out-alt"></i> Keluar Aplikasi
+            </button>
+        </div>
+    </div>
 
-    function pilihAvatar(element, url) {
-        // Hapus kelas selected dari semua item
-        document.querySelectorAll('.avatar-item').forEach(item => item.classList.remove('selected'));
-        // Tambah ke item yang diklik
-        element.querySelector('.avatar-item').classList.add('selected');
+  </main>
+
+  <!-- MENU BAWAH -->
+  <nav class="bg-white border-t border-fuchsia-100 h-16 fixed bottom-0 w-full flex justify-around items-center z-30 pb-1 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.03)]">
+    <button onclick="navTo('home')" id="navBotHome" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-home text-xl mb-1"></i><span class="text-[10px] font-bold">Home</span></button>
+    <button onclick="navTo('akademik')" id="navBotAkd" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i class="fas fa-book-open text-xl mb-1"></i><span class="text-[10px] font-bold">Akademik</span></button>
+    <button onclick="navToMenuKhusus()" id="navBotKhusus" class="flex flex-col items-center w-16 text-slate-400 transition active:scale-95"><i id="iconBotKhusus" class="fas fa-star text-xl mb-1"></i><span id="labelBotKhusus" class="text-[10px] font-bold">Menu</span></button>
+  </nav>
+
+  <!-- MODAL UPLOAD -->
+  <div id="modalUpload" class="fixed inset-0 bg-black/40 z-50 hidden flex items-center justify-center p-4 backdrop-blur-sm">
+    <div class="bg-white rounded-2xl p-5 w-full max-w-sm max-h-[90vh] overflow-y-auto shadow-2xl">
+        <h3 class="font-bold text-lg mb-4 text-fuchsia-800">Upload Konten</h3>
+        <div class="space-y-3">
+            <select id="upTipe" class="w-full p-2.5 bg-fuchsia-50 border border-fuchsia-100 rounded-xl font-bold text-sm text-fuchsia-800 outline-none"><option value="Materi">Materi</option><option value="Tugas">Tugas</option><option value="PR">PR</option><option value="Sumatif">Sumatif</option><option value="ASAS">ASAS</option><option value="TKA">TKA</option><option value="Kaldik">Kaldik</option></select>
+            <div class="grid grid-cols-2 gap-2"><select id="upKelas" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option value="1">Kelas 1</option><option value="2">Kelas 2</option><option value="3">Kelas 3</option><option value="4">Kelas 4</option><option value="5">Kelas 5</option><option value="6">Kelas 6</option></select><select id="upMapel" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none"><option>Matematika</option><option>B. Indonesia</option><option>IPAS</option><option>PKN</option><option>PAI</option><option>PJOK</option><option>Seni</option><option>Inggris</option><option>Basa Jawa</option></select></div>
+            <input id="upJudul" type="text" placeholder="Judul Konten" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none">
+            <div class="relative"><i class="fas fa-link absolute left-3 top-3 text-slate-400 text-xs"></i><input id="upLink" type="text" placeholder="Link URL (Video/Drive)" class="w-full p-2.5 pl-8 border border-slate-200 rounded-xl text-sm text-blue-600 outline-none"></div>
+            <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Atau Paste Kode HTML Embed (Kuis AI/Game):</p><textarea id="upHtml" rows="3" class="w-full p-2.5 border border-slate-200 rounded-xl text-xs font-mono bg-slate-50 outline-none placeholder-slate-400" placeholder='<iframe src="..."></iframe>'></textarea></div>
+            <div class="relative"><p class="text-[10px] text-slate-400 mb-1 ml-1 font-bold">Deadline:</p><input id="upDead" type="date" class="w-full p-2.5 border border-slate-200 rounded-xl text-sm outline-none text-slate-600"></div>
+            <div class="flex gap-2 mt-4"><button onclick="document.getElementById('modalUpload').classList.add('hidden')" class="flex-1 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-bold text-sm">Batal</button><button onclick="submitAkademik()" id="btnSimpanAkd" class="flex-1 bg-fuchsia-600 text-white py-2.5 rounded-xl font-bold text-sm hover:bg-fuchsia-700 shadow-md">Simpan</button></div>
+        </div>
+    </div>
+  </div>
+
+  <!-- LOGIN -->
+  <div id="loginOverlay" class="fixed inset-0 z-[60] bg-fuchsia-50 flex flex-col items-center justify-center p-6">
+    <div class="text-center w-full max-w-xs bg-white p-8 rounded-3xl shadow-xl border border-fuchsia-100">
+        <div class="w-20 h-20 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-3xl mx-auto flex items-center justify-center text-white text-4xl mb-5 shadow-lg shadow-fuchsia-200 rotate-6"><i class="fas fa-shapes"></i></div>
+        <h1 class="text-2xl font-bold text-fuchsia-900">E-Learning SD</h1>
+        <p class="text-xs text-slate-500 mb-6">Portal Belajar Digital Terpadu</p>
+        <div class="relative mb-4"><i class="fas fa-envelope absolute left-4 top-3.5 text-fuchsia-300"></i><input type="email" id="emailInput" class="w-full p-3 pl-10 border border-fuchsia-100 rounded-xl bg-fuchsia-50/50 text-sm font-bold text-slate-700 outline-none focus:border-fuchsia-400 focus:bg-white transition" placeholder="Email Sekolah"></div>
+        <button onclick="doLogin()" class="w-full p-3 bg-fuchsia-600 text-white rounded-xl font-bold shadow-lg shadow-fuchsia-200 hover:bg-fuchsia-700 transition active:scale-95">MASUK SEKARANG</button>
+        <p id="loginMsg" class="text-red-500 text-xs mt-3 font-bold h-4"></p>
+    </div>
+  </div>
+
+<script>
+// CONFIG
+const API_URL = "https://script.google.com/macros/s/AKfycbx9R2KHLhCbyIthh1_j6MoZ_Xxohh99NYfvN4iTMEbaDdp-HG4ZI4zMjmVjdKfFn3aqaA/exec";
+let USER = null;
+const el = (id) => document.getElementById(id);
+
+// AUTH
+const savedUser = localStorage.getItem('lmsUserV7');
+if(savedUser){
+    USER = JSON.parse(savedUser);
+    el('loginOverlay').classList.add('hidden');
+    initApp();
+}
+
+function doLogin(){
+    const email = el('emailInput').value.trim();
+    if(!email) return el('loginMsg').innerText = "Email wajib diisi";
+    el('loginMsg').innerText = "Memuat...";
+    fetch(`${API_URL}?action=login&email=${email}`).then(r=>r.json()).then(d=>{
+        if(d.status){
+            USER = d;
+            localStorage.setItem('lmsUserV7', JSON.stringify(d)); 
+            el('loginOverlay').classList.add('hidden');
+            initApp();
+        } else { el('loginMsg').innerText = d.message; }
+    });
+}
+function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV7'); location.reload(); } }
+
+function initApp(){
+    el('welcomeName').innerText = USER.nama;
+    el('headName').innerText = USER.nama;
+    el('headRole').innerText = USER.role;
+    el('profilNama').innerText = USER.nama;
+    el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
+    el('profilEmail').innerText = USER.email;
+    
+    // TAMPILKAN FOTO PROFIL
+    let avatarUrl = "";
+    if(USER.foto && USER.foto.startsWith("http")) {
+        avatarUrl = USER.foto;
+    } else {
+        // DEFAULT jika belum pilih
+        avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${USER.nama}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
+    }
+    el('headImg').src = avatarUrl; 
+    el('profilImg').src = avatarUrl;
+
+    if(USER.role === 'guru' || USER.role === 'admin'){
+        el('menuGuruSide').classList.remove('hidden');
+        el('btnTambahAkademik').classList.remove('hidden');
+        el('editProfilGuru').classList.remove('hidden');
+        el('iconBotKhusus').className = "fas fa-star text-xl mb-1";
+        el('labelBotKhusus').innerText = "Penilaian";
+    } else {
+        el('menuSiswaSide').classList.remove('hidden');
+        el('areaPilihAvatar').classList.remove('hidden'); // Tampilkan Pemilih Avatar
+        el('iconBotKhusus').className = "fas fa-clipboard-list text-xl mb-1";
+        el('labelBotKhusus').innerText = "Mading";
+    }
+    navTo('home');
+}
+
+// UPDATE FOTO USER
+function updateFotoUser(url){
+    if(!url) return alert("URL Foto kosong!");
+    
+    if(USER.role === 'guru' || USER.role === 'admin') el('btnSaveFoto').innerText = "...";
+    
+    const payload = { action: 'update_foto', email: USER.email, foto: url };
+    fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{
+        if(USER.role === 'guru' || USER.role === 'admin') el('btnSaveFoto').innerText = "Simpan";
         
-        selectedTempAvatar = url;
-        const btn = el('btnSimpanAvatar');
-        btn.disabled = false;
-        btn.innerText = "Gunakan Avatar Ini";
-        btn.classList.add('animate-pulse');
+        if(d.status){
+            alert("Avatar berhasil disimpan!");
+            USER.foto = url; 
+            localStorage.setItem('lmsUserV7', JSON.stringify(USER)); 
+            el('headImg').src = url; 
+            el('profilImg').src = url;
+        } else { alert("Gagal update foto."); }
+    });
+}
+
+function pilihAvatar(url){
+    if(confirm("Gunakan avatar ini?")) {
+        updateFotoUser(url);
     }
+}
 
-    async function simpanAvatar() {
-        if (!selectedTempAvatar) return;
+// NAVIGATION
+function toggleSidebar(){ const sb = el('sidebar'); const ov = el('sidebarOverlay'); if(sb.classList.contains('open')){ sb.classList.remove('open'); ov.classList.add('hidden'); } else { sb.classList.add('open'); ov.classList.remove('hidden'); } }
+function navTo(page){
+    ['viewHome','viewAkademik','viewNilaiGuru','viewNilaiSiswa','viewMading','viewPerpus','viewProfil','viewBerita'].forEach(id => { const elem = el(id); if(elem) elem.classList.add('hidden'); });
+    el('sidebar').classList.remove('open'); el('sidebarOverlay').classList.add('hidden');
+    ['navBotHome','navBotAkd','navBotKhusus'].forEach(id => { const elem = el(id); if(elem) elem.className = "flex flex-col items-center w-16 text-slate-400 transition active:scale-95"; });
 
-        const btn = el('btnSimpanAvatar');
-        const originalText = btn.innerText;
-        btn.innerText = "Menyimpan...";
-        btn.disabled = true;
-        btn.classList.remove('animate-pulse');
+    if(page==='home'){ 
+        el('viewHome').classList.remove('hidden'); 
+        const nav = el('navBotHome'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; 
+        loadHome(); loadKaldik(true); 
+    }
+    else if(page==='akademik'){ 
+        el('viewAkademik').classList.remove('hidden'); 
+        loadAkademik('Materi'); 
+        const nav = el('navBotAkd'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; 
+    }
+    else if(page==='nilaiGuru'){ el('viewNilaiGuru').classList.remove('hidden'); const nav = el('navBotKhusus'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
+    else if(page==='nilaiSiswa'){ el('viewNilaiSiswa').classList.remove('hidden'); loadLeaderboard(); }
+    else if(page==='mading'){ el('viewMading').classList.remove('hidden'); loadMading(); const nav = el('navBotKhusus'); if(nav) nav.className = "flex flex-col items-center w-16 text-fuchsia-600 transition active:scale-95"; }
+    else if(page==='perpus'){ el('viewPerpus').classList.remove('hidden'); loadPerpus(); loadKaldik(false); } 
+    else if(page==='profil'){ el('viewProfil').classList.remove('hidden'); }
+    else if(page==='berita'){ el('viewBerita').classList.remove('hidden'); loadBerita(); }
+}
+function navToMenuKhusus(){ if(USER.role === 'guru' || USER.role === 'admin') navTo('nilaiGuru'); else navTo('mading'); }
 
-        try {
-            // Kirim ke Backend
-            const response = await fetch(API_URL, {
-                method: 'POST',
-                body: JSON.stringify({
-                    action: 'update_foto',
-                    email: USER.email,
-                    foto: selectedTempAvatar
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.status) {
-                // Update State Lokal
-                USER.foto = selectedTempAvatar;
-                localStorage.setItem('lms_user', JSON.stringify(USER));
-                
-                // Update UI Langsung
-                el('userAvatar').src = selectedTempAvatar;
-                
-                tutupModalAvatar();
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Keren!',
-                    text: 'Avatar barumu berhasil dipasang.',
-                    timer: 1500,
-                    showConfirmButton: false
-                });
-            } else {
-                throw new Error(result.message);
-            }
-        } catch (e) {
-            Swal.fire('Gagal', 'Gagal menyimpan avatar. Coba lagi nanti.', 'error');
-        } finally {
-            btn.innerText = originalText;
-            btn.disabled = false;
+function loadHome(){
+    fetch(`${API_URL}?action=home`).then(r=>r.json()).then(d=>{
+        if(d.status && d.info) {
+             el('infoNama').innerText = d.info.nama || '-'; el('infoAlamat').innerText = d.info.alamat || '-';
+             el('infoOperator').innerText = d.info.operator || '-'; el('infoEmail').innerText = d.info.email || '-'; el('infoWeb').innerText = d.info.web || '-';
         }
-    }
+        window.CACHE_BERITA = d.pengumuman; el('listPengumuman').innerHTML = renderBerita(d.pengumuman);
+    });
+}
+function loadKaldik(isHome){
+    const containerId = isHome ? 'listKaldikHome' : 'listKaldikPerpus'; 
+    const container = el(containerId);
+    if(!container) return;
 
-    function loadPengumuman() {
-        // Fungsi simulasi pengumuman (biarkan seperti aslinya atau fetch backend)
-        const pList = el('pengumumanList');
-        // Fetch placeholder agar tidak kosong
-        fetch(`${API_URL}?action=home&email=${USER.email}`)
-        .then(r => r.json())
-        .then(d => {
-            if(d.status && d.data.pengumuman.length > 0){
-                pList.innerHTML = d.data.pengumuman.map(p => 
-                    `<div class="border-b border-fuchsia-50 pb-2 mb-2 last:border-0">
-                        <span class="text-[10px] text-fuchsia-500 font-semibold">${p.tanggal}</span>
-                        <h4 class="font-bold text-slate-700">${p.judul}</h4>
-                        <p class="line-clamp-2">${p.isi}</p>
-                    </div>`
-                ).join('');
-            } else {
-                pList.innerHTML = "Belum ada pengumuman.";
-            }
-        }).catch(() => {
-            pList.innerHTML = "Gagal memuat pengumuman.";
+    container.innerHTML = "<div class='text-center py-4'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
+    
+    fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{
+        const kaldik = d.data.filter(item => item.kategori === 'Kaldik' || item.kategori === 'kaldik');
+        if(kaldik.length){
+            container.innerHTML = kaldik.map(i => {
+                const linkContent = i.link || '';
+                if(linkContent.trim().startsWith('<')) {
+                    const blob = new Blob([linkContent], {type: 'text/html'});
+                    const url = URL.createObjectURL(blob);
+                    return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
+                }
+                return `<a href="${linkContent}" target="_blank" class="block bg-white p-3 rounded-xl border border-fuchsia-100 flex gap-3 items-center hover:bg-fuchsia-50"><div class="w-10 h-10 bg-teal-100 text-teal-600 rounded-full flex items-center justify-center"><i class="fas fa-calendar-check"></i></div><div><h4 class="font-bold text-sm text-slate-800">${i.judul}</h4><p class="text-xs text-slate-500">Lihat Kalender</p></div></a>`;
+            }).join('');
+        } else { container.innerHTML = `<div class="text-center py-4 border-2 border-dashed border-slate-200 rounded-xl text-xs text-slate-400">Belum ada info Kaldik.</div>`; }
+    });
+}
+function loadBerita(){ el('listBerita').innerHTML = renderBerita(window.CACHE_BERITA || []); }
+function renderBerita(data){ if(!data) return ""; return data.map(p => `<div class="bg-white p-4 rounded-xl border-l-4 border-blue-400 shadow-sm"><span class="text-[10px] font-bold bg-blue-50 text-blue-600 px-2 py-0.5 rounded">${p.tanggal}</span><h4 class="font-bold text-sm text-slate-800 mt-1">${p.judul}</h4><p class="text-xs text-slate-500 mt-1">${p.isi}</p></div>`).join('') || "<p class='text-center text-xs text-slate-400'>Tidak ada pengumuman.</p>"; }
+
+function filterAkademik(tipe){ loadAkademik(tipe); }
+function loadAkademik(tipe){
+    el('listAkademik').innerHTML = "<div class='text-center py-10'><i class='fas fa-circle-notch fa-spin text-fuchsia-500'></i></div>";
+    fetch(`${API_URL}?action=akademik&kelas=${USER.kelas}&role=${USER.role}`).then(r=>r.json()).then(d=>{
+        const filtered = d.data.filter(item => item.tipe === tipe);
+        if(filtered.length){
+            el('listAkademik').innerHTML = filtered.map(i => {
+                const linkContent = i.konten || i.link || '';
+                const canDelete = (USER.email === i.uploader || USER.role === 'admin') ? `<button onclick="deleteAkademik('${i.id}')" class="text-red-500 text-xs font-bold hover:underline ml-2">[Hapus]</button>` : '';
+
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
+                    const blob = new Blob([linkContent], {type: 'text/html'});
+                    const blobUrl = URL.createObjectURL(blob);
+                    
+                    return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
+                            <span class="text-[9px] font-bold text-red-500">${i.deadline||''}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 text-sm mb-2">${i.judul}</h4>
+                        <div class="game-viewer">
+                            <iframe src="${blobUrl}" allowfullscreen></iframe>
+                        </div>
+                    </div>`;
+                }
+                
+                return `<div class="block bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm hover:border-fuchsia-400 transition relative overflow-hidden group"><div class="absolute top-0 right-0 bg-fuchsia-50 text-fuchsia-600 text-[9px] px-2 py-1 rounded-bl-lg font-bold">${i.deadline || ''}</div><div class="flex items-center gap-3"><a href="${linkContent}" target="_blank" class="w-10 h-10 bg-fuchsia-50 text-fuchsia-600 rounded-full flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition"><i class="fas fa-book-open"></i></a><div><span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span><h4 class="font-bold text-slate-800 text-sm leading-tight mt-0.5"><a href="${linkContent}" target="_blank">${i.judul}</a></h4></div></div></div>`;
+            }).join('');
+        } else { el('listAkademik').innerHTML = `<div class="text-center py-10 text-slate-400 text-xs border-2 border-dashed border-fuchsia-100 rounded-xl">Belum ada konten ${tipe}</div>`; }
+    });
+}
+function showModalUpload(){ el('modalUpload').classList.remove('hidden'); }
+function submitAkademik(){
+    const htmlVal = el('upHtml').value;
+    const linkVal = el('upLink').value;
+    const p = { action: 'simpan_akademik', uploader: USER.email, tipe: el('upTipe').value, kelas: el('upKelas').value, mapel: el('upMapel').value, judul: el('upJudul').value, link: linkVal, htmlContent: htmlVal, deadline: el('upDead').value };
+    if(!p.judul) return alert("Judul wajib diisi!");
+    if(!htmlVal && !linkVal) return alert("Isi Link URL atau Paste Kode HTML!");
+    el('btnSimpanAkd').innerText = "...";
+    fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{ el('btnSimpanAkd').innerText = "Simpan"; alert(d.message); el('modalUpload').classList.add('hidden'); loadAkademik(p.tipe); });
+}
+function deleteAkademik(id){
+    if(confirm("Hapus konten ini?")){
+        const p = { action: 'hapus_akademik', id: id, email: USER.email, role: USER.role };
+        fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{
+            alert(d.message); if(d.status) loadAkademik('Materi'); 
         });
     }
-
-    // Auto Login Check
-    window.onload = function() {
-        const saved = localStorage.getItem('lms_user');
-        if (saved) {
-            USER = JSON.parse(saved);
-            initDashboard();
-        }
-    }
-  </script>
+}
+function loadSiswaDropdown(){ const k = el('inKelas').value; if(!k) return alert("Isi kelas!"); el('inSiswa').innerHTML = "<option>Memuat...</option>"; fetch(`${API_URL}?action=getSiswa&kelas=${k}`).then(r=>r.json()).then(d=>{ el('inSiswa').innerHTML = d.data.map(s => `<option value="${s.email}">${s.nama}</option>`).join(''); }); }
+function submitNilai(){ const p = { action: 'simpan_nilai', email: el('inSiswa').value, kategori: el('inKategori').value, mapel: el('inMapel').value, judul: el('inJudul').value, nilai: el('inNilai').value, catatan: el('inCatatan').value }; if(!p.email || !p.nilai) return alert("Data kurang lengkap"); el('btnSimpanNilai').innerText = "..."; fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{ el('btnSimpanNilai').innerText = "SIMPAN NILAI"; alert(d.message); }); }
+function loadLeaderboard(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top3 = d.data; if(top3.length){ el('top3Container').innerHTML = `${top3[1] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-2"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[1].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[1].rata}</p></div>` : ''}<div class="text-center w-1/3 mb-6"><i class="fas fa-medal text-5xl medal-1 animate-bounce"></i><p class="text-xs font-bold text-yellow-300 mt-1 truncate">${top3[0].nama}</p><span class="text-xs font-bold bg-white text-slate-900 px-2 rounded-full shadow-lg">${top3[0].rata}</span></div>${top3[2] ? `<div class="text-center w-1/3"><i class="fas fa-medal text-3xl medal-3"></i><p class="text-[10px] font-bold mt-1 truncate text-white">${top3[2].nama}</p><p class="text-xs font-bold text-fuchsia-200">${top3[2].rata}</p></div>` : ''}`; } else { el('top3Container').innerHTML = "<p class='text-xs opacity-50 text-white'>Belum ada data</p>"; } }); fetch(`${API_URL}?action=nilai&email=${USER.email}`).then(r=>r.json()).then(d=>{ el('riwayatNilai').innerHTML = d.data.map(n => `<div class="bg-white p-3 rounded-xl border border-fuchsia-50 flex justify-between items-center shadow-sm"><div><span class="text-[9px] font-bold bg-fuchsia-50 text-fuchsia-600 px-2 py-0.5 rounded uppercase">${n.kategori} • ${n.mapel}</span><h4 class="font-bold text-sm mt-1 text-slate-700">${n.judul}</h4></div><div class="text-lg font-bold ${n.nilai>=75?'text-green-600':'text-red-500'}">${n.nilai}</div></div>`).join(''); }); }
+function loadMading(){ fetch(`${API_URL}?action=leaderboard&kelas=${USER.kelas}`).then(r=>r.json()).then(d=>{ const top = d.data[0]; el('madingJuara').innerText = top ? `🏆 ${top.nama} (Rata-rata: ${top.rata})` : "Belum ada juara."; }); el('madingInfo').innerHTML = renderBerita(window.CACHE_BERITA || []); }
+function loadPerpus(){ el('listPerpus').innerHTML = "Memuat..."; fetch(`${API_URL}?action=perpus`).then(r=>r.json()).then(d=>{ 
+    const books = d.data.filter(item => item.kategori !== 'Kaldik' && item.kategori !== 'kaldik');
+    el('listPerpus').innerHTML = books.map(b => `<a href="${b.link}" target="_blank" class="block bg-white p-4 rounded-xl border border-fuchsia-100 text-center hover:shadow-md transition"><i class="fas fa-book-reader text-3xl text-fuchsia-400 mb-2"></i><h4 class="font-bold text-xs line-clamp-2 text-slate-700">${b.judul}</h4><span class="text-[10px] text-slate-400 bg-slate-50 px-2 rounded mt-1 inline-block">${b.kategori}</span></a>`).join(''); 
+}); }
+function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV7', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
+</script>
 </body>
 </html>
