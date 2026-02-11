@@ -13,22 +13,19 @@
     body { font-family: 'Poppins', sans-serif; background-color: #fdf4ff; -webkit-tap-highlight-color: transparent; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     
-    /* Sidebar Animasi */
+    .btn-side-float { position: fixed; top: 50%; left: 0; transform: translateY(-50%); background: #c026d3; color: white; padding: 14px 10px 14px 6px; border-radius: 0 16px 16px 0; box-shadow: 4px 0 15px rgba(192, 38, 211, 0.4); z-index: 50; cursor: pointer; transition: all 0.2s; }
+    .btn-side-float:active { transform: translateY(-50%) scale(0.9); }
     #sidebar { transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); transform: translateX(-100%); }
     #sidebar.open { transform: translateX(0); }
-    
     .card-sd { background: white; border-radius: 16px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid #fae8ff; }
     .hero-gradient { background: linear-gradient(135deg, #d946ef 0%, #4f46e5 100%); }
     .fade-in { animation: fadeIn 0.4s ease-out forwards; opacity: 0; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     
-    /* Embed Container */
     .embed-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; max-width: 100%; border-radius: 12px; margin-top: 10px; background: #f8fafc; border: 1px solid #e2e8f0; }
     .embed-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
-    
     .game-viewer { width: 100%; height: 600px; background: #fff; border: 2px solid #e879f9; border-radius: 12px; margin-top: 10px; overflow: hidden; position: relative; }
     .game-viewer iframe { width: 100%; height: 100%; border: none; }
-
     .medal-1 { color: #fbbf24; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-2 { color: #94a3b8; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
     .medal-3 { color: #d97706; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2)); }
@@ -36,17 +33,16 @@
 </head>
 <body class="text-slate-800 h-screen overflow-hidden flex flex-col bg-slate-50">
 
-  <!-- 1. SIDEBAR MENU (KIRI) -->
+  <!-- SIDEBAR -->
+  <div id="sidebarToggle" class="hidden btn-side-float" onclick="toggleSidebar()"><i class="fas fa-bars text-xl"></i></div>
   <aside id="sidebar" class="fixed inset-y-0 left-0 w-72 bg-white shadow-2xl z-50 flex flex-col border-r border-fuchsia-100">
     <div class="p-6 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white flex justify-between items-center shadow-md">
         <div><h2 class="font-bold text-lg">Menu Utama</h2><p class="text-xs text-fuchsia-100 opacity-80">SDN 04 Taman</p></div>
         <button onclick="toggleSidebar()" class="w-8 h-8 flex items-center justify-center bg-white/20 rounded-full hover:bg-white/30"><i class="fas fa-times"></i></button>
     </div>
-    
     <nav class="flex-1 overflow-y-auto p-4 space-y-1">
         <button onclick="navTo('home')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-home w-6 text-center text-blue-500"></i> Beranda</button>
         <button onclick="navTo('akademik')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-graduation-cap w-6 text-center text-fuchsia-500"></i> Akademik</button>
-        
         <div id="menuGuruSide" class="hidden">
             <button onclick="navTo('nilaiGuru')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-star w-6 text-center text-orange-500"></i> Input Nilai</button>
         </div>
@@ -54,7 +50,6 @@
             <button onclick="navTo('nilaiSiswa')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-trophy w-6 text-center text-yellow-500"></i> Nilai & Medali</button>
             <button onclick="navTo('mading')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-clipboard-list w-6 text-center text-purple-500"></i> Mading Kelas</button>
         </div>
-        
         <button onclick="navTo('perpus')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-book-reader w-6 text-center text-teal-500"></i> Perpus Digital</button>
         <button onclick="navTo('berita')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-newspaper w-6 text-center text-blue-500"></i> Berita Sekolah</button>
         <button onclick="navTo('profil')" class="w-full text-left p-3 hover:bg-fuchsia-50 rounded-xl flex gap-3 items-center text-sm font-medium text-slate-600 hover:text-fuchsia-600"><i class="fas fa-user-circle w-6 text-center text-slate-500"></i> Profil Saya</button>
@@ -65,36 +60,19 @@
   </aside>
   <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/30 z-40 hidden backdrop-blur-sm transition-opacity"></div>
 
-  <!-- 2. HEADER -->
-  <header class="bg-white h-16 flex items-center justify-between px-4 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
+  <!-- HEADER -->
+  <header class="bg-white h-16 flex items-center justify-between px-6 border-b border-fuchsia-100 shadow-sm sticky top-0 z-20">
     <div class="flex items-center gap-3">
-        <!-- TOMBOL HAMBURGER (SUDAH KEMBALI) -->
-        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100">
-            <i class="fas fa-bars text-2xl"></i>
-        </button>
-        
-        <!-- LOGO -->
-        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')">
-            <div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md">
-                <i class="fas fa-shapes"></i>
-            </div>
-            <span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span>
-        </div>
+        <button onclick="toggleSidebar()" class="w-10 h-10 flex items-center justify-center text-slate-500 hover:text-fuchsia-600 hover:bg-fuchsia-50 rounded-xl transition focus:outline-none active:bg-fuchsia-100"><i class="fas fa-bars text-2xl"></i></button>
+        <div class="flex items-center gap-2 cursor-pointer" onclick="navTo('home')"><div class="w-8 h-8 bg-gradient-to-br from-fuchsia-500 to-purple-600 rounded-lg flex items-center justify-center text-white shadow-md"><i class="fas fa-shapes"></i></div><span class="font-bold text-fuchsia-800 tracking-tight text-lg">SDN 04 TAMAN</span></div>
     </div>
-    
-    <!-- Profil Kanan Atas -->
     <div class="flex items-center gap-3">
-        <div class="text-right hidden sm:block">
-            <p id="headName" class="text-xs font-bold text-slate-700">User</p>
-            <p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p>
-        </div>
-        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')">
-            <img id="headImg" src="" class="w-full h-full object-cover">
-        </div>
+        <div class="text-right hidden sm:block"><p id="headName" class="text-xs font-bold text-slate-700">User</p><p id="headRole" class="text-[10px] text-fuchsia-500 font-bold uppercase">Role</p></div>
+        <div class="w-9 h-9 rounded-full bg-fuchsia-50 overflow-hidden border-2 border-fuchsia-200 cursor-pointer hover:border-fuchsia-400 transition" onclick="navTo('profil')"><img id="headImg" src="" class="w-full h-full object-cover"></div>
     </div>
   </header>
 
-  <!-- 3. KONTEN UTAMA -->
+  <!-- KONTEN -->
   <main id="mainContainer" class="flex-1 overflow-y-auto p-5 pb-24 space-y-6 scroll-smooth bg-fuchsia-50/30">
     
     <!-- HOME -->
@@ -115,7 +93,7 @@
     <!-- BERITA -->
     <div id="viewBerita" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Berita & Pengumuman</h2><div id="listBerita" class="space-y-3"></div></div>
 
-    <!-- PERPUS (KALDIK) -->
+    <!-- PERPUS -->
     <div id="viewPerpus" class="hidden fade-in space-y-6">
         <div><h2 class="text-lg font-bold mb-3 text-fuchsia-800 flex items-center gap-2"><i class="fas fa-calendar-alt"></i> Kalender Pendidikan</h2><div id="listKaldikPerpus" class="space-y-3"><div class="text-center py-6 border-2 border-dashed border-fuchsia-200 rounded-xl text-xs text-slate-400">Memuat Kaldik...</div></div></div>
         <div><h2 class="text-lg font-bold mb-3 text-blue-800 flex items-center gap-2"><i class="fas fa-book-reader"></i> Koleksi Pustaka</h2><div id="listPerpus" class="grid grid-cols-2 gap-3"></div></div>
@@ -132,9 +110,7 @@
             <button onclick="filterAkademik('ASAS')" class="px-4 py-2 rounded-xl bg-white border border-indigo-100 text-xs font-bold text-indigo-600 hover:bg-indigo-50 transition whitespace-nowrap shadow-sm">📝 ASAS</button>
             <button onclick="filterAkademik('TKA')" class="px-4 py-2 rounded-xl bg-white border border-purple-100 text-xs font-bold text-purple-600 hover:bg-purple-50 transition whitespace-nowrap shadow-sm">💻 TKA</button>
         </div>
-        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition">
-            <i class="fas fa-plus-circle"></i> Tambah Konten Baru
-        </button>
+        <button id="btnTambahAkademik" onclick="showModalUpload()" class="hidden w-full py-3 bg-blue-600 text-white rounded-xl font-bold shadow-lg shadow-blue-200 mb-2 flex items-center justify-center gap-2 hover:bg-blue-700 transition"><i class="fas fa-plus-circle"></i> Tambah Konten Baru</button>
         <div id="listAkademik" class="space-y-3 min-h-[200px]"></div>
     </div>
 
@@ -147,8 +123,27 @@
     <!-- MADING -->
     <div id="viewMading" class="hidden fade-in space-y-4"><h2 class="text-xl font-bold text-fuchsia-800">Mading Kelas</h2><div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center"><i class="fas fa-crown"></i></div><div><h3 class="font-bold text-slate-800">Bintang Kelas</h3><p class="text-xs text-slate-500">Nilai rata-rata tertinggi</p></div></div><div id="madingJuara" class="text-sm font-bold text-fuchsia-600 bg-fuchsia-50 p-3 rounded-lg text-center">Memuat juara...</div></div><div class="bg-white p-4 rounded-xl border border-blue-100 shadow-sm"><div class="flex items-center gap-3 mb-3"><div class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center"><i class="fas fa-bullhorn"></i></div><div><h3 class="font-bold text-slate-800">Info Sekolah</h3><p class="text-xs text-slate-500">Pengumuman terbaru</p></div></div><div id="madingInfo" class="space-y-2"></div></div></div>
     
-    <!-- PROFIL -->
-    <div id="viewProfil" class="hidden fade-in"><div class="text-center mt-6"><div class="w-24 h-24 bg-fuchsia-200 rounded-full mx-auto overflow-hidden border-4 border-white shadow-lg shadow-fuchsia-200"><img id="profilImg" src="" class="w-full h-full object-cover"></div><h2 id="profilNama" class="text-xl font-bold mt-3 text-fuchsia-900">Nama Siswa</h2><p id="profilRole" class="text-sm text-fuchsia-500 font-medium">Siswa Kelas -</p><div id="editProfilGuru" class="hidden mt-6 px-6"><p class="text-xs font-bold text-left mb-1 text-slate-500">Update Foto Profil (URL)</p><div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-fuchsia-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold">Simpan</button></div></div></div></div>
+    <!-- PROFIL (AVATAR FIXED) -->
+    <div id="viewProfil" class="hidden fade-in">
+        <div class="card-sd p-8 text-center mt-6 bg-white/90 backdrop-blur-sm border-2 border-fuchsia-100">
+            <div class="w-32 h-32 bg-fuchsia-50 rounded-full mx-auto overflow-hidden border-4 border-white shadow-xl shadow-fuchsia-200 mb-4 ring-2 ring-fuchsia-200">
+                <img id="profilImg" src="" class="w-full h-full object-cover">
+            </div>
+            <h2 id="profilNama" class="text-2xl font-bold text-fuchsia-900 tracking-tight">Nama Siswa</h2>
+            <div class="inline-block bg-fuchsia-100 text-fuchsia-600 text-xs font-bold px-3 py-1 rounded-full mt-2 mb-4" id="profilRole">Siswa Kelas -</div>
+            <p id="profilEmail" class="text-xs text-slate-400 font-mono mb-6 pb-6 border-b border-dashed border-fuchsia-200">email@sekolah.id</p>
+            
+            <div id="editProfilGuru" class="hidden text-left bg-slate-50 p-4 rounded-xl border border-slate-100">
+                <p class="text-xs font-bold text-slate-500 mb-2">Ganti Foto Profil (Link URL)</p>
+                <div class="flex gap-2"><input type="text" id="urlFotoGuru" placeholder="https://..." class="w-full p-2 border border-slate-200 rounded-lg text-sm bg-white"><button onclick="updateFotoGuru()" id="btnSaveFoto" class="bg-fuchsia-600 text-white px-4 rounded-lg text-xs font-bold hover:bg-fuchsia-700">Simpan</button></div>
+            </div>
+            
+            <button onclick="doLogout()" class="mt-4 w-full py-3 border-2 border-red-100 text-red-500 rounded-xl font-bold text-sm hover:bg-red-50 transition flex items-center justify-center gap-2">
+                <i class="fas fa-sign-out-alt"></i> Keluar Aplikasi
+            </button>
+        </div>
+    </div>
+
   </main>
 
   <!-- MENU BAWAH -->
@@ -192,11 +187,17 @@ let USER = null;
 const el = (id) => document.getElementById(id);
 
 // AUTH (GANTI VERSI AGAR REFRESH)
-const savedUser = localStorage.getItem('lmsUserV6'); // VERSI 6 FINAL
+const savedUser = localStorage.getItem('lmsUserV7'); // V7 FINAL
 if(savedUser){
     USER = JSON.parse(savedUser);
     el('loginOverlay').classList.add('hidden');
-    initApp();
+    // Cek jika data gender belum ada (data lama), paksa logout
+    if(USER.role === 'siswa' && !USER.gender) {
+         localStorage.removeItem('lmsUserV7');
+         location.reload();
+    } else {
+         initApp();
+    }
 }
 
 function doLogin(){
@@ -206,13 +207,13 @@ function doLogin(){
     fetch(`${API_URL}?action=login&email=${email}`).then(r=>r.json()).then(d=>{
         if(d.status){
             USER = d;
-            localStorage.setItem('lmsUserV6', JSON.stringify(d)); 
+            localStorage.setItem('lmsUserV7', JSON.stringify(d)); 
             el('loginOverlay').classList.add('hidden');
             initApp();
         } else { el('loginMsg').innerText = d.message; }
     });
 }
-function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV6'); location.reload(); } }
+function doLogout(){ if(confirm("Keluar dari aplikasi?")){ localStorage.removeItem('lmsUserV7'); location.reload(); } }
 
 function initApp(){
     el('welcomeName').innerText = USER.nama;
@@ -220,22 +221,23 @@ function initApp(){
     el('headRole').innerText = USER.role;
     el('profilNama').innerText = USER.nama;
     el('profilRole').innerText = `${USER.role} • Kelas ${USER.kelas}`;
+    el('profilEmail').innerText = USER.email;
     
     // FIX AVATAR GENDER
     let avatarUrl = "";
     if(USER.foto && USER.foto.startsWith("http")) {
         avatarUrl = USER.foto;
     } else {
-        const seed = USER.nama.replace(/ /g, '');
+        const seed = USER.nama.replace(/ /g, '+');
         const gender = (USER.gender || "L").toUpperCase();
         let options = "";
         
         if (gender === 'P') {
+            // Rambut Cewek / Hijab (DiceBear v9)
             options = "&top=longHair,hijab,bob,curly,bigHair,bun&hairColor=2c1b18,4a312c"; 
-            el('profilNama').innerText += " (P)";
         } else {
-            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat&hairColor=2c1b18,4a312c";
-             el('profilNama').innerText += " (L)";
+            // Rambut Cowok (DiceBear v9)
+            options = "&top=shortHair,caesar,caesarSidePart,shortCurly,shortFlat&hairColor=2c1b18,4a312c"; 
         }
         avatarUrl = `https://api.dicebear.com/9.x/avataaars/svg?seed=${seed}${options}&backgroundColor=b6e3f4,c0aede,d1d4f9`;
     }
@@ -303,7 +305,7 @@ function loadKaldik(isHome){
         if(kaldik.length){
             container.innerHTML = kaldik.map(i => {
                 const linkContent = i.link || '';
-                if(linkContent.trim().startsWith('<')) {
+                if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const url = URL.createObjectURL(blob);
                     return `<div class="bg-white p-3 rounded-xl border border-fuchsia-100 mb-2"><h4 class="font-bold text-sm text-slate-800 mb-2">${i.judul}</h4><div class="embed-container"><iframe src="${url}" style="width:100%;height:100%;border:0;"></iframe></div></div>`;
@@ -329,19 +331,15 @@ function loadAkademik(tipe){
                 if(linkContent.trim().startsWith('<') || linkContent.includes('<iframe') || linkContent.includes('<div')) {
                     const blob = new Blob([linkContent], {type: 'text/html'});
                     const blobUrl = URL.createObjectURL(blob);
-                    
                     return `<div class="bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm mb-3">
                         <div class="flex justify-between items-center mb-2">
                             <span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span>
                             <span class="text-[9px] font-bold text-red-500">${i.deadline||''}</span>
                         </div>
                         <h4 class="font-bold text-slate-800 text-sm mb-2">${i.judul}</h4>
-                        <div class="game-viewer">
-                            <iframe src="${blobUrl}" allowfullscreen></iframe>
-                        </div>
+                        <div class="game-viewer"><iframe src="${blobUrl}" allowfullscreen></iframe></div>
                     </div>`;
                 }
-                
                 return `<div class="block bg-white p-4 rounded-xl border border-fuchsia-100 shadow-sm hover:border-fuchsia-400 transition relative overflow-hidden group"><div class="absolute top-0 right-0 bg-fuchsia-50 text-fuchsia-600 text-[9px] px-2 py-1 rounded-bl-lg font-bold">${i.deadline || ''}</div><div class="flex items-center gap-3"><a href="${linkContent}" target="_blank" class="w-10 h-10 bg-fuchsia-50 text-fuchsia-600 rounded-full flex items-center justify-center group-hover:bg-fuchsia-600 group-hover:text-white transition"><i class="fas fa-book-open"></i></a><div><span class="text-[9px] font-bold text-slate-400 uppercase tracking-wide bg-slate-50 px-1 rounded">${i.mapel} ${canDelete}</span><h4 class="font-bold text-slate-800 text-sm leading-tight mt-0.5"><a href="${linkContent}" target="_blank">${i.judul}</a></h4></div></div></div>`;
             }).join('');
         } else { el('listAkademik').innerHTML = `<div class="text-center py-10 text-slate-400 text-xs border-2 border-dashed border-fuchsia-100 rounded-xl">Belum ada konten ${tipe}</div>`; }
@@ -360,9 +358,7 @@ function submitAkademik(){
 function deleteAkademik(id){
     if(confirm("Hapus konten ini?")){
         const p = { action: 'hapus_akademik', id: id, email: USER.email, role: USER.role };
-        fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{
-            alert(d.message); if(d.status) loadAkademik('Materi'); 
-        });
+        fetch(API_URL, {method:'POST', body:JSON.stringify(p)}).then(r=>r.json()).then(d=>{ alert(d.message); if(d.status) loadAkademik('Materi'); });
     }
 }
 function loadSiswaDropdown(){ const k = el('inKelas').value; if(!k) return alert("Isi kelas!"); el('inSiswa').innerHTML = "<option>Memuat...</option>"; fetch(`${API_URL}?action=getSiswa&kelas=${k}`).then(r=>r.json()).then(d=>{ el('inSiswa').innerHTML = d.data.map(s => `<option value="${s.email}">${s.nama}</option>`).join(''); }); }
@@ -373,7 +369,7 @@ function loadPerpus(){ el('listPerpus').innerHTML = "Memuat..."; fetch(`${API_UR
     const books = d.data.filter(item => item.kategori !== 'Kaldik' && item.kategori !== 'kaldik');
     el('listPerpus').innerHTML = books.map(b => `<a href="${b.link}" target="_blank" class="block bg-white p-4 rounded-xl border border-fuchsia-100 text-center hover:shadow-md transition"><i class="fas fa-book-reader text-3xl text-fuchsia-400 mb-2"></i><h4 class="font-bold text-xs line-clamp-2 text-slate-700">${b.judul}</h4><span class="text-[10px] text-slate-400 bg-slate-50 px-2 rounded mt-1 inline-block">${b.kategori}</span></a>`).join(''); 
 }); }
-function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV4', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
+function updateFotoGuru(){ const url = document.getElementById('urlFotoGuru').value; if(!url) return; el('btnSaveFoto').innerText = "..."; const payload = { action: 'update_foto', email: USER.email, foto: url }; fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }).then(r=>r.json()).then(d=>{ el('btnSaveFoto').innerText = "Simpan"; if(d.status){ alert("Foto berhasil diperbarui!"); USER.foto = url; localStorage.setItem('lmsUserV7', JSON.stringify(USER)); el('headImg').src = url; el('profilImg').src = url; } else { alert("Gagal update foto."); } }); }
 </script>
 </body>
 </html>
